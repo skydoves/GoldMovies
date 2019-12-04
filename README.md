@@ -1,6 +1,8 @@
 # GoldMovies
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0) [![API](https://img.shields.io/badge/API-16%2B-brightgreen.svg?style=flat)](https://android-arsenal.com/api?level=16) <a href="https://github.com/skydoves"><img alt="License" src="https://img.shields.io/static/v1?label=GitHub&message=skydoves&color=C51162"/></a>
 
+GoldMovies is based on Kotlin, MVVM architecture, coroutines, dagger, koin, and material designs & animations.
+
 ## Previews
 <p align="center">
 <img src="/preview/preview0.gif" width="32%"/>
@@ -111,7 +113,7 @@ Based on `Material` design & animations.
 - Shared Element Transition.
 
 ## Find this repository useful? :heart:
-Support it by joining __[stargazers](https://github.com/skydoves/GoldMovies/stargazers2)__ for this repository. :star: <br>
+Support it by joining __[stargazers](https://github.com/skydoves/GoldMovies/stargazers)__ for this repository. :star: <br>
 And __[follow](https://github.com/skydoves)__ me for my next creations! 🤩
 
 ## Supports :coffee:
