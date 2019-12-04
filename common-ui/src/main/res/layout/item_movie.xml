@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  xmlns:tools="http://schemas.android.com/tools">
+
+  <data>
+
+    <variable
+      name="movie"
+      type="com.skydoves.entity.entities.Movie" />
+
+    <variable
+      name="palette"
+      type="android.view.View" />
+  </data>
+
+  <RelativeLayout
+    android:layout_width="match_parent"
+    android:layout_height="290dp"
+    android:foreground="?attr/selectableItemBackground"
+    android:orientation="vertical"
+    tools:background="@color/background"
+    tools:ignore="UnusedAttribute">
+
+    <ImageView
+      android:id="@+id/item_poster_post"
+      android:layout_width="match_parent"
+      android:layout_height="240dp"
+      android:scaleType="fitXY"
+      app:bindingPalettePostUrl="@{movie.poster_path}"
+      app:palette="@{palette}"
+      tools:src="@drawable/ic_star" />
+
+    <com.skydoves.androidribbon.ShimmerRibbonView
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_margin="8dp"
+      android:alpha="0.9"
+      android:visibility="gone"
+      app:bindingRibbonOnMovie="@{movie}"
+      app:shimmer_base_alpha="1.0"
+      app:shimmer_highlight_alpha="0.7"
+      app:shimmer_ribbon_background_color="@color/colorPrimaryDark"
+      app:shimmer_ribbon_padding_left="6dp"
+      app:shimmer_ribbon_padding_right="6dp"
+      app:shimmer_ribbon_text="New!"
+      app:shimmer_ribbon_textColor="@android:color/white"
+      app:shimmer_ribbon_textSize="4sp"
+      app:shimmer_ribbon_textStyle="bold"
+      app:shimmer_width_ratio="0.3" />
+
+    <RelativeLayout
+      android:layout_width="match_parent"
+      android:layout_height="50dp"
+      android:layout_alignParentBottom="true"
+      android:orientation="vertical"
+      tools:background="@color/colorPrimaryDark">
+
+      <LinearLayout
+        android:id="@+id/item_poster_palette"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:alpha="0.7"
+        android:orientation="vertical" />
+
+      <TextView
+        android:id="@+id/item_poster_title"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:padding="3dp"
+        android:text="@{movie.title}"
+        android:textColor="@color/white"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        tools:text="title" />
+    </RelativeLayout>
+  </RelativeLayout>
+</layout>

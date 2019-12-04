@@ -1,0 +1,2 @@
+include ':mvvm', ':entity', ':network', ':common-ui', ':mvvm-coroutines'
+rootProject.name='GoldMovies'

@@ -1,0 +1,7 @@
+<resources>
+  <string name="app_name">GoldMovies</string>
+  <string name="trailers">Trailers</string>
+  <string name="summary">Summary</string>
+  <string name="reviews">Reviews</string>
+  <string name="favourites">Favourites</string>
+</resources>

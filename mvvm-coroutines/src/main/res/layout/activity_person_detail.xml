@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+
+  <data>
+
+    <variable
+      name="activity"
+      type="androidx.activity.ComponentActivity" />
+
+    <variable
+      name="viewModel"
+      type="com.skydoves.mvvm_coroutines.ui.details.person.PersonDetailViewModel" />
+
+    <variable
+      name="person"
+      type="com.skydoves.entity.entities.Person" />
+  </data>
+
+  <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background"
+    android:orientation="vertical">
+
+    <com.google.android.material.appbar.AppBarLayout
+      android:id="@+id/appBarLayout"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content">
+
+      <include
+        layout="@layout/toolbar_default"
+        app:activity="@{activity}"
+        app:title="@{person.name}" />
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <ScrollView
+      android:layout_width="match_parent"
+      android:layout_height="match_parent">
+
+      <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="10dp">
+
+        <androidx.cardview.widget.CardView
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          app:cardBackgroundColor="@color/background800"
+          app:cardCornerRadius="6dp"
+          app:cardElevation="4dp">
+
+          <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <ImageView
+              android:id="@+id/person_detail_profile"
+              android:layout_width="110dp"
+              android:layout_height="110dp"
+              android:layout_gravity="center_horizontal"
+              android:layout_marginTop="20dp"
+              android:transitionName="@string/transition_profile"
+              app:bindBackDrop="@{person}"
+              tools:src="@drawable/ic_tv"
+              tools:targetApi="LOLLIPOP" />
+
+            <TextView
+              android:id="@+id/person_detail_name"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:layout_gravity="center_horizontal"
+              android:layout_marginTop="7dp"
+              android:text="@{person.name}"
+              android:textColor="@color/white"
+              android:textSize="23sp" />
+
+            <TextView
+              android:id="@+id/person_detail_biography"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:layout_gravity="center_horizontal"
+              android:layout_marginTop="10dp"
+              android:layout_marginBottom="10dp"
+              android:padding="10dp"
+              android:textColor="@color/white"
+              android:textSize="13sp"
+              app:biography="@{viewModel.personLiveData}" />
+          </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+        <com.google.android.material.chip.ChipGroup
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:layout_marginTop="15dp"
+          android:padding="10dp"
+          android:visibility="gone"
+          app:chipSpacingHorizontal="5dp"
+          app:chipSpacingVertical="6dp"
+          app:mapNameTagList="@{viewModel.personLiveData}"
+          app:singleLine="false"
+          tools:visibility="visible" />
+      </LinearLayout>
+    </ScrollView>
+  </LinearLayout>
+</layout>

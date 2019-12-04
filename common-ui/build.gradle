@@ -1,0 +1,47 @@
+apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-kapt'
+apply from: '../dependencies.gradle'
+
+android {
+    compileSdkVersion versions.compileSdk
+    defaultConfig {
+        minSdkVersion versions.minSdk
+        targetSdkVersion versions.compileSdk
+        versionCode versions.versionCode
+        versionName versions.versionName
+    }
+    dataBinding {
+        enabled = true
+    }
+}
+
+dependencies {
+    // module dependencies
+    implementation project(":entity")
+
+    // kotlin
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$versions.kotlin"
+
+    // google material
+    api "com.google.android.material:material:$versions.materialVersion"
+
+    // glide
+    implementation "com.github.bumptech.glide:glide:$versions.glideVersion"
+    implementation "com.github.florent37:glidepalette:$versions.glidePaletteVersion"
+    kapt "com.github.bumptech.glide:compiler:$versions.glideVersion"
+
+    // adapter
+    api "com.github.skydoves:baserecyclerviewadapter:$versions.baseAdapter"
+
+    // whatIf
+    implementation "com.github.skydoves:whatif:$versions.whatIfVersion"
+
+    // custom views
+    api "com.github.skydoves:flourish:$versions.flourishVersion"
+    implementation "com.github.skydoves:androidribbon:$versions.androidRibbonVersion"
+    implementation "com.ms-square:expandableTextView:$versions.expandableTextViewVersion"
+}
+
+apply from: '../spotless.gradle'
