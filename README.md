@@ -22,9 +22,6 @@ Add your [The Movie DB](https://www.themoviedb.org)'s API key in your `local.pro
 tmdb_api_key=YOUR_API_KEY
 ```
 
-## Code style formatting & Lint check
-Ideally, [Spotless](https://github.com/diffplug/spotless) is a code formatter can do more than just find formatting errors - it should fix them as well. Such a formatter is really just a Function<String, String>, which returns a formatted version of its potentially unformatted input.
-
 ## Module structure
 The module structure is designed to try several different architectures.
 
