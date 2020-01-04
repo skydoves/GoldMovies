@@ -17,22 +17,18 @@
 package com.skydoves.entity.converters
 
 import androidx.room.TypeConverter
-import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
 import com.skydoves.entity.Review
 
 /** ReviewListConverter is a converter class for type converting a entity. */
-open class ReviewListConverter {
+open class ReviewListConverter : BaseMoshiConverter() {
 
   @TypeConverter
   fun fromString(value: String): List<Review>? {
-    val listType = object : TypeToken<List<Review>>() {}.type
-    return Gson().fromJson<List<Review>>(value, listType)
+    return getAdapter<List<Review>?>().fromJson(value)
   }
 
   @TypeConverter
   fun fromList(list: List<Review>?): String {
-    val gson = Gson()
-    return gson.toJson(list)
+    return getAdapter<List<Review>?>().toJson(list)
   }
 }

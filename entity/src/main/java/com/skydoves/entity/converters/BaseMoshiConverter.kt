@@ -16,19 +16,14 @@
 
 package com.skydoves.entity.converters
 
-import androidx.room.TypeConverter
-import com.skydoves.entity.Video
+import com.squareup.moshi.JsonAdapter
+import com.squareup.moshi.Moshi
 
-/** VideoListConverter is a converter class for type converting a entity. */
-open class VideoListConverter : BaseMoshiConverter() {
+abstract class BaseMoshiConverter {
 
-  @TypeConverter
-  fun fromString(value: String): List<Video>? {
-    return getAdapter<List<Video>?>().fromJson(value)
-  }
+  val moshi: Moshi = Moshi.Builder().build()
 
-  @TypeConverter
-  fun fromList(list: List<Video>?): String {
-    return getAdapter<List<Video>?>().toJson(list)
+  inline fun <reified T> getAdapter(): JsonAdapter<T> {
+    return this.moshi.adapter(T::class.java)
   }
 }
