@@ -113,10 +113,10 @@ Based on `Material` design & animations.
 Support it by joining __[stargazers](https://github.com/skydoves/GoldMovies/stargazers)__ for this repository. :star: <br>
 And __[follow](https://github.com/skydoves)__ me for my next creations! 🤩
 
-## Supports :coffee:
-If you feel like support me a coffee for my efforts, I would greatly appreciate it. <br><br>
+## Sponsor :coffee:
+If you feel like to sponsor me a coffee for my efforts, I would greatly appreciate it. <br><br>
 
-<a href="https://www.buymeacoffee.com/skydoves" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/lato-blue.png" alt="Buy Me A Coffee" style="height: 51px !important;width: 217px !important;" ></a>
+<a href="https://www.buymeacoffee.com/skydoves" target="_blank"><img src="https://skydoves.github.io/sponsor.png" alt="Buy Me A Coffee" style="height: 51px !important;width: 217px !important;" ></a>
 
 # License
 ```xml
