@@ -31,7 +31,7 @@ import dagger.Provides
 import javax.inject.Singleton
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
-import retrofit2.converter.moshi.MoshiConverterFactory
+import retrofit2.converter.gson.GsonConverterFactory
 
 @Module
 class NetworkModule {
@@ -50,7 +50,7 @@ class NetworkModule {
     return Retrofit.Builder()
       .client(okHttpClient)
       .baseUrl(EndPoint.TheMovieDB)
-      .addConverterFactory(MoshiConverterFactory.create())
+      .addConverterFactory(GsonConverterFactory.create())
       .build()
   }
 

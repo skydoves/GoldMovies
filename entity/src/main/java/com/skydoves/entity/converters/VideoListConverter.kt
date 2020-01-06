@@ -17,18 +17,22 @@
 package com.skydoves.entity.converters
 
 import androidx.room.TypeConverter
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import com.skydoves.entity.Video
 
 /** VideoListConverter is a converter class for type converting a entity. */
-open class VideoListConverter : BaseMoshiConverter() {
+open class VideoListConverter {
 
   @TypeConverter
   fun fromString(value: String): List<Video>? {
-    return getAdapter<List<Video>?>().fromJson(value)
+    val listType = object : TypeToken<List<Video>>() {}.type
+    return Gson().fromJson<List<Video>>(value, listType)
   }
 
   @TypeConverter
   fun fromList(list: List<Video>?): String {
-    return getAdapter<List<Video>?>().toJson(list)
+    val gson = Gson()
+    return gson.toJson(list)
   }
 }

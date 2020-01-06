@@ -17,18 +17,22 @@
 package com.skydoves.entity.converters
 
 import androidx.room.TypeConverter
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import com.skydoves.entity.Keyword
 
 /** KeywordListConverter is a converter class for type converting a entity. */
-open class KeywordListConverter : BaseMoshiConverter() {
+open class KeywordListConverter {
 
   @TypeConverter
   fun fromString(value: String): List<Keyword>? {
-    return getAdapter<List<Keyword>?>().fromJson(value)
+    val listType = object : TypeToken<List<Keyword>>() {}.type
+    return Gson().fromJson<List<Keyword>>(value, listType)
   }
 
   @TypeConverter
   fun fromList(list: List<Keyword>?): String {
-    return getAdapter<List<Keyword>?>().toJson(list)
+    val gson = Gson()
+    return gson.toJson(list)
   }
 }

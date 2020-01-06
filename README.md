@@ -32,7 +32,7 @@ The module structure is designed to try several different architectures.
 
 ### Dependencies
 - Room Persistence - constructing database (An abstraction layer over SQLite).
-- [Moshi converter](https://github.com/square/retrofit/tree/master/retrofit-converters/moshi) - a converter which uses Moshi for serialization to and from JSON.
+- [Gson converter](https://github.com/square/retrofit/tree/master/retrofit-converters/gson) - a converter which uses Gson for serialization to and from JSON.
 - [Threetenabp](https://github.com/JakeWharton/ThreeTenABP) - an adaptation of the JSR-310 backport for Android.
 
 ### Unit Test
