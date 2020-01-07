@@ -55,6 +55,9 @@ dependencies {
     kapt "com.google.dagger:dagger-compiler:$versions.daggerVersion"
     kapt "com.google.dagger:dagger-android-processor:$versions.daggerVersion"
 
+    //navigation view
+    implementation "ss.anoop:awesome-navigation:$versions.navigationVersion"
+
     // debugging
     implementation "com.jakewharton.timber:timber:$versions.timberVersion"
 

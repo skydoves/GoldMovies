@@ -28,14 +28,15 @@
       android:layout_weight="1"
       app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
-    <com.google.android.material.bottomnavigation.BottomNavigationView
+    <ss.anoop.awesomenavigation.AwesomeNavigation
       android:id="@+id/main_bottom_navigation"
       android:layout_width="match_parent"
-      android:layout_height="wrap_content"
+      android:layout_height="56dp"
       android:background="@color/colorPrimary"
-      app:itemBackground="@color/colorPrimary"
-      app:itemIconTint="@color/white"
-      app:itemTextColor="@color/white"
-      app:menu="@menu/menus" />
+      app:textColor="@color/white"
+      app:textSize="14sp"
+      app:iconSize="24dp"
+      app:spacing="4dp"
+      app:navItems="@menu/menus" />
   </LinearLayout>
 </RelativeLayout>

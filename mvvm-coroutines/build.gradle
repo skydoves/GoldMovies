@@ -59,6 +59,9 @@ dependencies {
     // debugging
     implementation "com.jakewharton.timber:timber:$versions.timberVersion"
 
+    //navigation view
+    implementation "ss.anoop:awesome-navigation:$versions.navigationVersion"
+
     // unit test
     testImplementation "junit:junit:$versions.junitVersion"
     testImplementation "androidx.test:core:$versions.androidxTest"

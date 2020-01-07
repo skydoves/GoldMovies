@@ -36,6 +36,7 @@ import javax.inject.Inject
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.layout_favourites.view.*
 import kotlinx.android.synthetic.main.toolbar_home.view.*
+import ss.anoop.awesomenavigation.OnNavigationSelectedListener
 
 class MainActivity : ViewModelActivity(), HasSupportFragmentInjector,
   MovieFavouriteListViewHolder.Delegate, TvFavouriteListViewHolder.Delegate {
@@ -64,17 +65,21 @@ class MainActivity : ViewModelActivity(), HasSupportFragmentInjector,
       override fun onPageScrollStateChanged(state: Int) = Unit
       override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) = Unit
       override fun onPageSelected(position: Int) {
-        main_bottom_navigation.menu.getItem(position).isChecked = true
+        main_bottom_navigation.selectItem(position)
       }
     })
-    main_bottom_navigation.setOnNavigationItemSelectedListener {
-      when (it.itemId) {
-        R.id.action_one -> main_viewpager.currentItem = 0
-        R.id.action_two -> main_viewpager.currentItem = 1
-        R.id.action_three -> main_viewpager.currentItem = 2
+    main_bottom_navigation.setOnNavigationSelectedListener(object : OnNavigationSelectedListener {
+
+      override fun onSelectNavigation(id: Int, position: Int) {
+        when (id) {
+          R.id.action_one -> main_viewpager.currentItem = 0
+          R.id.action_two -> main_viewpager.currentItem = 1
+          R.id.action_three -> main_viewpager.currentItem = 2
+        }
       }
-      true
-    }
+
+      override fun onReselectNavigation(id: Int, position: Int) {}
+    })
 
     this.flourish.flourishView.recyclerViewMovies.adapter = adapterMovieList
     this.flourish.flourishView.recyclerViewTvs.adapter = adapterTvList
