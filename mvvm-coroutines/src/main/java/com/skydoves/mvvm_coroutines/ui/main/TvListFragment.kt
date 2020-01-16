@@ -36,17 +36,17 @@ import org.koin.android.viewmodel.ext.android.viewModel
 class TvListFragment : DatabindingFragment(), TvListViewHolder.Delegate {
 
   private val viewModel by viewModel<MainActivityViewModel>()
-  private lateinit var binding: FragmentTvBinding
 
   override fun onCreateView(
     inflater: LayoutInflater,
     container: ViewGroup?,
     savedInstanceState: Bundle?
   ): View? {
-    binding = binding(inflater, R.layout.fragment_tv, container)
-    binding.viewModel = viewModel
-    binding.lifecycleOwner = this
-    return binding.root
+    return binding<FragmentTvBinding>(
+      inflater, R.layout.fragment_tv, container).apply {
+      viewModel = this@TvListFragment.viewModel
+      lifecycleOwner = this@TvListFragment
+    }.root
   }
 
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

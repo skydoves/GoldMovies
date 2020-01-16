@@ -29,9 +29,14 @@ import com.skydoves.entity.entities.Tv
 import com.skydoves.mvvm_coroutines.R
 import com.skydoves.mvvm_coroutines.ui.details.movie.MovieDetailActivity
 import com.skydoves.mvvm_coroutines.ui.details.tv.TvDetailActivity
-import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.layout_favourites.view.*
-import kotlinx.android.synthetic.main.toolbar_home.view.*
+import kotlinx.android.synthetic.main.activity_main.main_bottom_navigation
+import kotlinx.android.synthetic.main.activity_main.main_toolbar
+import kotlinx.android.synthetic.main.activity_main.main_viewpager
+import kotlinx.android.synthetic.main.activity_main.parentView
+import kotlinx.android.synthetic.main.layout_favourites.view.back
+import kotlinx.android.synthetic.main.layout_favourites.view.recyclerViewMovies
+import kotlinx.android.synthetic.main.layout_favourites.view.recyclerViewTvs
+import kotlinx.android.synthetic.main.toolbar_home.view.toolbar_favourite
 import org.koin.android.viewmodel.ext.android.viewModel
 
 class MainActivity : AppCompatActivity(),
@@ -53,27 +58,29 @@ class MainActivity : AppCompatActivity(),
   }
 
   private fun initializeUI() {
-    main_viewpager.adapter = MainPagerAdapter(supportFragmentManager)
-    main_viewpager.offscreenPageLimit = 3
-    main_viewpager.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
-      override fun onPageScrollStateChanged(state: Int) = Unit
-      override fun onPageScrolled(
-        position: Int,
-        positionOffset: Float,
-        positionOffsetPixels: Int
-      ) = Unit
+    with(main_viewpager) {
+      adapter = MainPagerAdapter(supportFragmentManager)
+      offscreenPageLimit = 3
+      addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
+        override fun onPageScrollStateChanged(state: Int) = Unit
+        override fun onPageScrolled(
+          position: Int,
+          positionOffset: Float,
+          positionOffsetPixels: Int
+        ) = Unit
 
-      override fun onPageSelected(position: Int) {
-        main_bottom_navigation.menu.getItem(position).isChecked = true
+        override fun onPageSelected(position: Int) {
+          main_bottom_navigation.menu.getItem(position).isChecked = true
+        }
+      })
+      main_bottom_navigation.setOnNavigationItemSelectedListener {
+        when (it.itemId) {
+          R.id.action_one -> currentItem = 0
+          R.id.action_two -> currentItem = 1
+          R.id.action_three -> currentItem = 2
+        }
+        true
       }
-    })
-    main_bottom_navigation.setOnNavigationItemSelectedListener {
-      when (it.itemId) {
-        R.id.action_one -> main_viewpager.currentItem = 0
-        R.id.action_two -> main_viewpager.currentItem = 1
-        R.id.action_three -> main_viewpager.currentItem = 2
-      }
-      true
     }
 
     this.flourish.flourishView.recyclerViewMovies.adapter = adapterMovieList

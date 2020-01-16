@@ -30,22 +30,21 @@ import com.skydoves.mvvm.R
 import com.skydoves.mvvm.base.ViewModelFragment
 import com.skydoves.mvvm.databinding.FragmentTvBinding
 import com.skydoves.mvvm.ui.details.tv.TvDetailActivity
-import kotlinx.android.synthetic.main.fragment_tv.*
+import kotlinx.android.synthetic.main.fragment_tv.recyclerView
 
 class TvListFragment : ViewModelFragment(), TvListViewHolder.Delegate {
 
   private val viewModel by viewModel<MainActivityViewModel>()
-  private lateinit var binding: FragmentTvBinding
 
   override fun onCreateView(
     inflater: LayoutInflater,
     container: ViewGroup?,
     savedInstanceState: Bundle?
   ): View? {
-    binding = binding(inflater, R.layout.fragment_tv, container)
-    binding.viewModel = viewModel
-    binding.lifecycleOwner = this
-    return binding.root
+    return binding<FragmentTvBinding>(inflater, R.layout.fragment_tv, container).apply {
+      viewModel = this@TvListFragment.viewModel
+      lifecycleOwner = this@TvListFragment
+    }.root
   }
 
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -68,7 +67,7 @@ class TvListFragment : ViewModelFragment(), TvListViewHolder.Delegate {
     }
   }
 
-  private fun loadMore(page: Int) = viewModel.postTvPage(page)
+  private fun loadMore(page: Int) = this.viewModel.postTvPage(page)
 
   override fun onItemClick(tv: Tv) = TvDetailActivity.startActivityModel(requireContext(),
     tv.id)

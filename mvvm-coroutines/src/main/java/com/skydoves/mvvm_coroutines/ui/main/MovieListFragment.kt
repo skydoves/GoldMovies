@@ -36,17 +36,17 @@ import org.koin.android.viewmodel.ext.android.viewModel
 class MovieListFragment : DatabindingFragment(), MovieListViewHolder.Delegate {
 
   private val viewModel by viewModel<MainActivityViewModel>()
-  private lateinit var binding: FragmentMovieBinding
 
   override fun onCreateView(
     inflater: LayoutInflater,
     container: ViewGroup?,
     savedInstanceState: Bundle?
   ): View? {
-    binding = binding(inflater, R.layout.fragment_movie, container)
-    binding.viewModel = viewModel
-    binding.lifecycleOwner = this
-    return binding.root
+    return binding<FragmentMovieBinding>(
+      inflater, R.layout.fragment_movie, container).apply {
+      viewModel = this@MovieListFragment.viewModel
+      lifecycleOwner = this@MovieListFragment
+    }.root
   }
 
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -69,7 +69,7 @@ class MovieListFragment : DatabindingFragment(), MovieListViewHolder.Delegate {
     }
   }
 
-  private fun loadMore(page: Int) = viewModel.postMoviePage(page)
+  private fun loadMore(page: Int) = this.viewModel.postMoviePage(page)
 
   override fun onItemClick(movie: Movie) =
     MovieDetailActivity.startActivityModel(requireContext(), movie.id)

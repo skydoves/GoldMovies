@@ -30,22 +30,22 @@ import com.skydoves.mvvm.R
 import com.skydoves.mvvm.base.ViewModelFragment
 import com.skydoves.mvvm.databinding.FragmentPeopleBinding
 import com.skydoves.mvvm.ui.details.person.PersonDetailActivity
-import kotlinx.android.synthetic.main.fragment_people.*
+import kotlinx.android.synthetic.main.fragment_people.recyclerView
 
 class PersonListFragment : ViewModelFragment(), PeopleViewHolder.Delegate {
 
   private val viewModel by viewModel<MainActivityViewModel>()
-  private lateinit var binding: FragmentPeopleBinding
 
   override fun onCreateView(
     inflater: LayoutInflater,
     container: ViewGroup?,
     savedInstanceState: Bundle?
   ): View? {
-    binding = binding(inflater, R.layout.fragment_people, container)
-    binding.viewModel = viewModel
-    binding.lifecycleOwner = this
-    return binding.root
+    return binding<FragmentPeopleBinding>(
+      inflater, R.layout.fragment_people, container).apply {
+      viewModel = this@PersonListFragment.viewModel
+      lifecycleOwner = this@PersonListFragment
+    }.root
   }
 
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -68,7 +68,7 @@ class PersonListFragment : ViewModelFragment(), PeopleViewHolder.Delegate {
     }
   }
 
-  private fun loadMore(page: Int) = viewModel.postPeoplePage(page)
+  private fun loadMore(page: Int) = this.viewModel.postPeoplePage(page)
 
   override fun onItemClick(person: Person, view: View) =
     PersonDetailActivity.startActivity(activity, person.id, view)

@@ -36,17 +36,17 @@ import org.koin.android.viewmodel.ext.android.viewModel
 class PersonListFragment : DatabindingFragment(), PeopleViewHolder.Delegate {
 
   private val viewModel by viewModel<MainActivityViewModel>()
-  private lateinit var binding: FragmentPeopleBinding
 
   override fun onCreateView(
     inflater: LayoutInflater,
     container: ViewGroup?,
     savedInstanceState: Bundle?
   ): View? {
-    binding = binding(inflater, R.layout.fragment_people, container)
-    binding.viewModel = viewModel
-    binding.lifecycleOwner = this
-    return binding.root
+    return binding<FragmentPeopleBinding>(
+      inflater, R.layout.fragment_people, container).apply {
+      viewModel = this@PersonListFragment.viewModel
+      lifecycleOwner = this@PersonListFragment
+    }.root
   }
 
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -69,7 +69,7 @@ class PersonListFragment : DatabindingFragment(), PeopleViewHolder.Delegate {
     }
   }
 
-  private fun loadMore(page: Int) = viewModel.postPeoplePage(page)
+  private fun loadMore(page: Int) = this.viewModel.postPeoplePage(page)
 
   override fun onItemClick(person: Person, view: View) =
     PersonDetailActivity.startActivity(activity, person.id, view)
