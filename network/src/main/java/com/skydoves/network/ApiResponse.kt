@@ -46,9 +46,9 @@ sealed class ApiResponse<out T> {
    */
   sealed class Failure<out T> {
     class Error<out T>(response: Response<out T>) : ApiResponse<T>() {
-      val responseBody: ResponseBody? = response.errorBody()
+      val responseBody: ResponseBody? = response.errorBody()?.apply { close() }
       val code: Int = response.code()
-      override fun toString(): String = "[ApiResponse.Failure $code]: $responseBody"
+      override fun toString(): String = "[ApiResponse.Failure $code]: ${responseBody?.string()}"
     }
 
     class Exception<out T>(exception: Throwable) : ApiResponse<T>() {
