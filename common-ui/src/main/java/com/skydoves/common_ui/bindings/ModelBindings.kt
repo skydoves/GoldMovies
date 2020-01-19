@@ -22,10 +22,10 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.databinding.BindingAdapter
-import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
+import com.skydoves.common_ui.GlideApp
 import com.skydoves.common_ui.PosterPath.getBackdropPath
 import com.skydoves.common_ui.R
 import com.skydoves.common_ui.extensions.requestGlideListener
@@ -105,9 +105,8 @@ fun bindBackDrop(view: ImageView, tv: Tv) {
 @BindingAdapter("bindBackDrop")
 fun bindBackDrop(view: ImageView, person: Person) {
   person.profile_path.whatIfNotNull {
-    Glide.with(view.context)
+    GlideApp.with(view.context)
       .load(getBackdropPath(it))
-      .error(ContextCompat.getDrawable(view.context, R.drawable.not_found))
       .apply(RequestOptions().circleCrop())
       .into(view)
   }
@@ -116,14 +115,14 @@ fun bindBackDrop(view: ImageView, person: Person) {
 private fun bindBackDrop(view: ImageView, path: String?, posterPath: String?) {
   path.whatIfNotNull(
     whatIf = {
-      Glide.with(view.context)
+      GlideApp.with(view.context)
         .load(getBackdropPath(it))
         .error(ContextCompat.getDrawable(view.context, R.drawable.not_found))
         .listener(view.requestGlideListener())
         .into(view)
     },
     whatIfNot = {
-      Glide.with(view.context)
+      GlideApp.with(view.context)
         .load(getBackdropPath(posterPath))
         .error(ContextCompat.getDrawable(view.context, R.drawable.not_found))
         .listener(view.requestGlideListener())

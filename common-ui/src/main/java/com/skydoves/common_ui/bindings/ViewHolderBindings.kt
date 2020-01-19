@@ -18,12 +18,14 @@ package com.skydoves.common_ui.bindings
 
 import android.view.View
 import android.widget.ImageView
+import androidx.core.content.ContextCompat
 import androidx.databinding.BindingAdapter
-import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.github.florent37.glidepalette.BitmapPalette
 import com.github.florent37.glidepalette.GlidePalette
+import com.skydoves.common_ui.GlideApp
 import com.skydoves.common_ui.PosterPath
+import com.skydoves.common_ui.R
 import com.skydoves.common_ui.extensions.gone
 import com.skydoves.common_ui.extensions.visible
 import com.skydoves.entity.entities.Movie
@@ -34,8 +36,9 @@ import org.threeten.bp.LocalDate
 @BindingAdapter("bindingPostUrl")
 fun bindingPostUrl(imageView: ImageView, path: String?) {
   path?.let {
-    Glide.with(imageView.context)
+    GlideApp.with(imageView.context)
       .load(PosterPath.getPosterPath(it))
+      .error(ContextCompat.getDrawable(imageView.context, R.drawable.not_found))
       .apply(RequestOptions().circleCrop())
       .into(imageView)
   }
@@ -44,8 +47,9 @@ fun bindingPostUrl(imageView: ImageView, path: String?) {
 @BindingAdapter("bindingPalettePostUrl", "palette")
 fun bindingPalettePostUrl(imageView: ImageView, path: String?, palette: View) {
   path?.let {
-    Glide.with(imageView.context)
+    GlideApp.with(imageView.context)
       .load(PosterPath.getPosterPath(it))
+      .error(ContextCompat.getDrawable(imageView.context, R.drawable.not_found))
       .listener(GlidePalette.with(PosterPath.getPosterPath(it))
         .use(BitmapPalette.Profile.VIBRANT)
         .intoBackground(palette)
@@ -57,8 +61,9 @@ fun bindingPalettePostUrl(imageView: ImageView, path: String?, palette: View) {
 @BindingAdapter("bindingPaletteYoutubeUrl", "palette")
 fun bindingPaletteYoutubeUrl(imageView: ImageView, path: String?, palette: View) {
   path?.let {
-    Glide.with(imageView.context)
+    GlideApp.with(imageView.context)
       .load(PosterPath.getYoutubeThumbnailPath(it))
+      .error(ContextCompat.getDrawable(imageView.context, R.drawable.not_found))
       .listener(GlidePalette.with(PosterPath.getYoutubeThumbnailPath(it))
         .use(BitmapPalette.Profile.VIBRANT)
         .intoBackground(palette)
