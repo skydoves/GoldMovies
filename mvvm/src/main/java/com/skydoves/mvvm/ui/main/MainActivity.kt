@@ -88,12 +88,14 @@ class MainActivity : ViewModelActivity(), HasSupportFragmentInjector,
       }
     }
 
-    this.flourish.flourishView.recyclerViewMovies.adapter = adapterMovieList
-    this.flourish.flourishView.recyclerViewTvs.adapter = adapterTvList
-    this.flourish.flourishView.back.setOnClickListener { flourish.dismiss() }
-    main_toolbar.toolbar_favourite.setOnClickListener {
-      refreshFavourites()
-      this.flourish.show()
+    with(flourish.flourishView) {
+      recyclerViewMovies.adapter = adapterMovieList
+      recyclerViewTvs.adapter = adapterTvList
+      back.setOnClickListener { flourish.dismiss() }
+      main_toolbar.toolbar_favourite.setOnClickListener {
+        refreshFavourites()
+        flourish.show()
+      }
     }
   }
 

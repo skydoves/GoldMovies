@@ -16,25 +16,8 @@
 
 package com.skydoves.mvvm.di
 
-import com.skydoves.mvvm.ui.main.MovieListFragment
-import com.skydoves.mvvm.ui.main.PersonListFragment
-import com.skydoves.mvvm.ui.main.TvListFragment
-import dagger.Module
-import dagger.android.ContributesAndroidInjector
+import javax.inject.Scope
 
-@Suppress("unused")
-@Module
-abstract class MainActivityFragmentModule {
-
-  @FragmentScope
-  @ContributesAndroidInjector
-  abstract fun contributeMovieListFragment(): MovieListFragment
-
-  @FragmentScope
-  @ContributesAndroidInjector
-  abstract fun contributeTvListFragment(): TvListFragment
-
-  @FragmentScope
-  @ContributesAndroidInjector
-  abstract fun contributePersonListFragment(): PersonListFragment
-}
+@Scope
+@kotlin.annotation.Retention(AnnotationRetention.RUNTIME)
+annotation class ActivityScope
