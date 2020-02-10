@@ -28,7 +28,7 @@ class TvFavouriteDiffCallback(
     oldList[oldItemPosition].id == newList[newItemPosition].id
 
   override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int) =
-    oldList[oldItemPosition].id == newList[newItemPosition].id
+    areItemsTheSame(oldItemPosition, newItemPosition)
 
   override fun getOldListSize() = oldList.size
 
