@@ -28,7 +28,7 @@ import com.skydoves.mvvm.databinding.ActivityMovieDetailBinding
 
 class MovieDetailActivity : ViewModelActivity() {
 
-  private val vm by viewModel<MovieDetailViewModel>()
+  private val vm: MovieDetailViewModel by injectViewModels()
   private val binding
     by binding<ActivityMovieDetailBinding>(R.layout.activity_movie_detail)
 

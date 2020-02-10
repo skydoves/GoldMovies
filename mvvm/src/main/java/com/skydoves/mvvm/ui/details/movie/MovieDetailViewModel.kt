@@ -29,8 +29,9 @@ import com.skydoves.mvvm.repository.MovieRepository
 import javax.inject.Inject
 import timber.log.Timber
 
-class MovieDetailViewModel @Inject
-constructor(private val movieRepository: MovieRepository) : ViewModel() {
+class MovieDetailViewModel @Inject constructor(
+  private val movieRepository: MovieRepository
+) : ViewModel() {
 
   private val movieIdLiveData: MutableLiveData<Int> = MutableLiveData()
   val keywordListLiveData: LiveData<List<Keyword>>

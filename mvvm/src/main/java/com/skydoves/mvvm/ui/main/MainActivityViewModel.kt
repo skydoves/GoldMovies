@@ -28,8 +28,7 @@ import com.skydoves.mvvm.repository.PeopleRepository
 import javax.inject.Inject
 import timber.log.Timber
 
-class MainActivityViewModel @Inject
-constructor(
+class MainActivityViewModel @Inject constructor(
   private val discoverRepository: DiscoverRepository,
   private val peopleRepository: PeopleRepository
 ) : ViewModel() {

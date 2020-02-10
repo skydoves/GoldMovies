@@ -34,7 +34,7 @@ import kotlinx.android.synthetic.main.fragment_tv.recyclerView
 
 class TvListFragment : ViewModelFragment(), TvListViewHolder.Delegate {
 
-  private val viewModel by viewModel<MainActivityViewModel>()
+  private val viewModel: MainActivityViewModel by injectActivityVIewModels()
 
   override fun onCreateView(
     inflater: LayoutInflater,
@@ -69,8 +69,8 @@ class TvListFragment : ViewModelFragment(), TvListViewHolder.Delegate {
 
   private fun loadMore(page: Int) = this.viewModel.postTvPage(page)
 
-  override fun onItemClick(tv: Tv) = TvDetailActivity.startActivityModel(requireContext(),
-    tv.id)
+  override fun onItemClick(tv: Tv) =
+    TvDetailActivity.startActivityModel(requireContext(), tv.id)
 
   private fun observeMessages() =
     this.viewModel.toastLiveData.observe(this) { context?.toast(it) }

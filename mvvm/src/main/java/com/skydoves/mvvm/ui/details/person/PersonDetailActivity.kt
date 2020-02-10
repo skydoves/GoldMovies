@@ -31,7 +31,7 @@ import com.skydoves.mvvm.databinding.ActivityPersonDetailBinding
 
 class PersonDetailActivity : ViewModelActivity() {
 
-  private val vm by viewModel<PersonDetailViewModel>()
+  private val vm: PersonDetailViewModel by injectViewModels()
   private val binding
     by binding<ActivityPersonDetailBinding>(R.layout.activity_person_detail)
 

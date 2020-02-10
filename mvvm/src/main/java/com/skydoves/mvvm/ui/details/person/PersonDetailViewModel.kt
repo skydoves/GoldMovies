@@ -26,8 +26,9 @@ import com.skydoves.mvvm.repository.PeopleRepository
 import javax.inject.Inject
 import timber.log.Timber
 
-class PersonDetailViewModel @Inject
-constructor(private val peopleRepository: PeopleRepository) : ViewModel() {
+class PersonDetailViewModel @Inject constructor(
+  private val peopleRepository: PeopleRepository
+) : ViewModel() {
 
   private val personIdLiveData: MutableLiveData<Int> = MutableLiveData()
   val personLiveData: LiveData<PersonDetail>

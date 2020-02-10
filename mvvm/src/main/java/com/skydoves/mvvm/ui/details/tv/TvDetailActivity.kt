@@ -28,7 +28,7 @@ import com.skydoves.mvvm.databinding.ActivityTvDetailBinding
 
 class TvDetailActivity : ViewModelActivity() {
 
-  private val vm by viewModel<TvDetailViewModel>()
+  private val vm: TvDetailViewModel by injectViewModels()
   private val binding
     by binding<ActivityTvDetailBinding>(R.layout.activity_tv_detail)
 

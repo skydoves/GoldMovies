@@ -47,7 +47,7 @@ class MainActivity : ViewModelActivity(), HasAndroidInjector,
 
   @Inject
   lateinit var fragmentInjector: DispatchingAndroidInjector<Any>
-  private val viewModel by viewModel<MainActivityViewModel>()
+  private val viewModel: MainActivityViewModel by injectViewModels()
 
   private val adapterMovieList = MovieFavouriteListAdapter(this)
   private val adapterTvList = TvFavouriteListAdapter(this)

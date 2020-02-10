@@ -44,7 +44,7 @@ abstract class ViewModelActivity : AppCompatActivity() {
   }
 
   protected inline fun <reified VM : ViewModel>
-    viewModel(): Lazy<VM> = viewModels { viewModelFactory }
+    injectViewModels(): Lazy<VM> = viewModels { viewModelFactory }
 
   protected inline fun <reified T : ViewDataBinding> binding(
     @LayoutRes resId: Int

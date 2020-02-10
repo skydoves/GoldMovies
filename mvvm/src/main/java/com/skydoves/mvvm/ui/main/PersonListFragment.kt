@@ -34,7 +34,7 @@ import kotlinx.android.synthetic.main.fragment_people.recyclerView
 
 class PersonListFragment : ViewModelFragment(), PeopleViewHolder.Delegate {
 
-  private val viewModel by viewModel<MainActivityViewModel>()
+  private val viewModel: MainActivityViewModel by injectActivityVIewModels()
 
   override fun onCreateView(
     inflater: LayoutInflater,

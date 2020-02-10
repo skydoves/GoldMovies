@@ -29,8 +29,9 @@ import com.skydoves.mvvm.repository.TvRepository
 import javax.inject.Inject
 import timber.log.Timber
 
-class TvDetailViewModel @Inject
-constructor(private val tvRepository: TvRepository) : ViewModel() {
+class TvDetailViewModel @Inject constructor(
+  private val tvRepository: TvRepository
+) : ViewModel() {
 
   private val tvIdLiveData: MutableLiveData<Int> = MutableLiveData()
   val keywordListLiveData: LiveData<List<Keyword>>

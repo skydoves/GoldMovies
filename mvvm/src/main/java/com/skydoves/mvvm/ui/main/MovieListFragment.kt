@@ -34,7 +34,7 @@ import kotlinx.android.synthetic.main.fragment_movie.recyclerView
 
 class MovieListFragment : ViewModelFragment(), MovieListViewHolder.Delegate {
 
-  private val viewModel by viewModel<MainActivityViewModel>()
+  private val viewModel: MainActivityViewModel by injectActivityVIewModels()
 
   override fun onCreateView(
     inflater: LayoutInflater,
@@ -70,8 +70,8 @@ class MovieListFragment : ViewModelFragment(), MovieListViewHolder.Delegate {
 
   private fun loadMore(page: Int) = this.viewModel.postMoviePage(page)
 
-  override fun onItemClick(movie: Movie) = MovieDetailActivity.startActivityModel(requireContext(),
-    movie.id)
+  override fun onItemClick(movie: Movie) =
+    MovieDetailActivity.startActivityModel(requireContext(), movie.id)
 
   private fun observeMessages() =
     this.viewModel.toastLiveData.observe(this) { context?.toast(it) }
