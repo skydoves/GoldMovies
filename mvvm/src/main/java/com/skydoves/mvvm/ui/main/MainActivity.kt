@@ -17,7 +17,6 @@
 package com.skydoves.mvvm.ui.main
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import androidx.viewpager.widget.ViewPager
 import com.skydoves.common_ui.adapters.MovieFavouriteListAdapter
 import com.skydoves.common_ui.adapters.TvFavouriteListAdapter
@@ -30,8 +29,9 @@ import com.skydoves.mvvm.R
 import com.skydoves.mvvm.base.ViewModelActivity
 import com.skydoves.mvvm.ui.details.movie.MovieDetailActivity
 import com.skydoves.mvvm.ui.details.tv.TvDetailActivity
+import dagger.android.AndroidInjector
 import dagger.android.DispatchingAndroidInjector
-import dagger.android.support.HasSupportFragmentInjector
+import dagger.android.HasAndroidInjector
 import javax.inject.Inject
 import kotlinx.android.synthetic.main.activity_main.main_bottom_navigation
 import kotlinx.android.synthetic.main.activity_main.main_toolbar
@@ -42,11 +42,11 @@ import kotlinx.android.synthetic.main.layout_favourites.view.recyclerViewMovies
 import kotlinx.android.synthetic.main.layout_favourites.view.recyclerViewTvs
 import kotlinx.android.synthetic.main.toolbar_home.view.toolbar_favourite
 
-class MainActivity : ViewModelActivity(), HasSupportFragmentInjector,
+class MainActivity : ViewModelActivity(), HasAndroidInjector,
   MovieFavouriteListViewHolder.Delegate, TvFavouriteListViewHolder.Delegate {
 
   @Inject
-  lateinit var fragmentInjector: DispatchingAndroidInjector<Fragment>
+  lateinit var fragmentInjector: DispatchingAndroidInjector<Any>
   private val viewModel by viewModel<MainActivityViewModel>()
 
   private val adapterMovieList = MovieFavouriteListAdapter(this)
@@ -123,5 +123,7 @@ class MainActivity : ViewModelActivity(), HasSupportFragmentInjector,
     }
   }
 
-  override fun supportFragmentInjector() = fragmentInjector
+  override fun androidInjector(): AndroidInjector<Any> {
+    return fragmentInjector
+  }
 }
