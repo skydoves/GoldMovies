@@ -24,9 +24,7 @@ import timber.log.Timber
 @Suppress("unused")
 class App : DaggerApplication() {
 
-  private val appComponent = DaggerAppComponent.builder()
-    .application(this)
-    .build()
+  private val appComponent = DaggerAppComponent.factory().create(this)
 
   override fun onCreate() {
     super.onCreate()
