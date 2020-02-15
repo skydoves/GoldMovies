@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.skydoves.mvvm.utils
+package com.skydoves.mvvm.di
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider

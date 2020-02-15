@@ -16,6 +16,7 @@
 
 package com.skydoves.mvvm.di
 
+import com.skydoves.mvvm.di.annotations.FragmentScope
 import com.skydoves.mvvm.ui.main.MovieListFragment
 import com.skydoves.mvvm.ui.main.PersonListFragment
 import com.skydoves.mvvm.ui.main.TvListFragment

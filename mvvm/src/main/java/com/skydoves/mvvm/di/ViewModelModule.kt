@@ -18,11 +18,11 @@ package com.skydoves.mvvm.di
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import com.skydoves.mvvm.di.annotations.ViewModelKey
 import com.skydoves.mvvm.ui.details.movie.MovieDetailViewModel
 import com.skydoves.mvvm.ui.details.person.PersonDetailViewModel
 import com.skydoves.mvvm.ui.details.tv.TvDetailViewModel
 import com.skydoves.mvvm.ui.main.MainActivityViewModel
-import com.skydoves.mvvm.utils.AppViewModelFactory
 import dagger.Binds
 import dagger.Module
 import dagger.multibindings.IntoMap

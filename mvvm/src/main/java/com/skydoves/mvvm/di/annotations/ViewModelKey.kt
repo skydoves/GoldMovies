@@ -14,10 +14,12 @@
  * limitations under the License.
  */
 
-package com.skydoves.mvvm.di
+package com.skydoves.mvvm.di.annotations
 
-import javax.inject.Scope
+import androidx.lifecycle.ViewModel
+import dagger.MapKey
+import kotlin.reflect.KClass
 
-@Scope
-@kotlin.annotation.Retention(AnnotationRetention.RUNTIME)
-annotation class FragmentScope
+@MapKey
+@Target(AnnotationTarget.FUNCTION)
+internal annotation class ViewModelKey(val value: KClass<out ViewModel>)

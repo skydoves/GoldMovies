@@ -16,6 +16,7 @@
 
 package com.skydoves.mvvm.di
 
+import com.skydoves.mvvm.di.annotations.ActivityScope
 import com.skydoves.mvvm.ui.details.movie.MovieDetailActivity
 import com.skydoves.mvvm.ui.details.person.PersonDetailActivity
 import com.skydoves.mvvm.ui.details.tv.TvDetailActivity

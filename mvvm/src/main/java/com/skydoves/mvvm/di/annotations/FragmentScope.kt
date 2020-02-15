@@ -14,10 +14,10 @@
  * limitations under the License.
  */
 
-package com.skydoves.mvvm.di
+package com.skydoves.mvvm.di.annotations
 
 import javax.inject.Scope
 
 @Scope
 @kotlin.annotation.Retention(AnnotationRetention.RUNTIME)
-annotation class ActivityScope
+annotation class FragmentScope
