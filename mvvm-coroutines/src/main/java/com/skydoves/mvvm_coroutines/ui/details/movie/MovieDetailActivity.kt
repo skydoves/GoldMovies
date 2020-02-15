@@ -41,7 +41,7 @@ class MovieDetailActivity : DatabindingActivity() {
       lifecycleOwner = this@MovieDetailActivity
       activity = this@MovieDetailActivity
       viewModel = this@MovieDetailActivity.viewModel
-      movie = viewModel.getMovie()
+      movie = this@MovieDetailActivity.viewModel.getMovie()
     }
     // observe error messages
     observeMessages()

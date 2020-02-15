@@ -44,7 +44,7 @@ class PersonDetailActivity : DatabindingActivity() {
       lifecycleOwner = this@PersonDetailActivity
       activity = this@PersonDetailActivity
       viewModel = this@PersonDetailActivity.viewModel
-      person = viewModel.getPerson()
+      person = this@PersonDetailActivity.viewModel.getPerson()
     }
     // observe error messages
     observeMessages()

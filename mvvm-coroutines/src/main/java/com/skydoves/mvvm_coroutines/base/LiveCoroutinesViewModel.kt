@@ -22,7 +22,7 @@ import androidx.lifecycle.liveData
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Dispatchers
 
-open class LiveCoroutinesViewModel : ViewModel() {
+abstract class LiveCoroutinesViewModel : ViewModel() {
 
   internal fun <T> launchOnViewModelScope(block: suspend () -> LiveData<T>): LiveData<T> {
     return liveData(viewModelScope.coroutineContext + Dispatchers.IO) {

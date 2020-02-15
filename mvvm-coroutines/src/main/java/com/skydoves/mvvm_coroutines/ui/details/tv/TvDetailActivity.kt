@@ -41,7 +41,7 @@ class TvDetailActivity : DatabindingActivity() {
       lifecycleOwner = this@TvDetailActivity
       activity = this@TvDetailActivity
       viewModel = this@TvDetailActivity.viewModel
-      tv = viewModel.getTv()
+      tv = this@TvDetailActivity.viewModel.getTv()
     }
     // observe error messages
     observeMessages()
