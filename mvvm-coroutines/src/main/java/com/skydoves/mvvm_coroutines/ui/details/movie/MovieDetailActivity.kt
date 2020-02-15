@@ -29,19 +29,19 @@ import org.koin.android.viewmodel.ext.android.viewModel
 
 class MovieDetailActivity : DatabindingActivity() {
 
-  private val vm by viewModel<MovieDetailViewModel>()
-  private val binding by binding<ActivityMovieDetailBinding>(R.layout.activity_movie_detail)
+  private val viewModel: MovieDetailViewModel by viewModel()
+  private val binding: ActivityMovieDetailBinding by binding(R.layout.activity_movie_detail)
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     // post the movie id from intent
-    vm.postMovieId(intent.getIntExtra(movie, 0))
+    viewModel.postMovieId(intent.getIntExtra(movie, 0))
     // binding data into layout view
     with(binding) {
       lifecycleOwner = this@MovieDetailActivity
       activity = this@MovieDetailActivity
-      viewModel = vm
-      movie = vm.getMovie()
+      viewModel = this@MovieDetailActivity.viewModel
+      movie = viewModel.getMovie()
     }
     // observe error messages
     observeMessages()
@@ -53,13 +53,13 @@ class MovieDetailActivity : DatabindingActivity() {
   }
 
   private fun observeMessages() =
-    this.vm.toastLiveData.observe(this) { toast(it) }
+    this.viewModel.toastLiveData.observe(this) { toast(it) }
 
   companion object {
     private const val movie = "movie"
     fun startActivityModel(context: Context?, movieId: Int) {
-      val intent = Intent(context, MovieDetailActivity::class.java)
-      intent.putExtra(movie, movieId)
+      val intent =
+        Intent(context, MovieDetailActivity::class.java).apply { putExtra(movie, movieId) }
       context?.startActivity(intent)
     }
   }

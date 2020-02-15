@@ -27,8 +27,7 @@ import com.skydoves.mvvm_coroutines.repository.DiscoverRepository
 import com.skydoves.mvvm_coroutines.repository.PeopleRepository
 import timber.log.Timber
 
-class MainActivityViewModel
-constructor(
+class MainActivityViewModel constructor(
   private val discoverRepository: DiscoverRepository,
   private val peopleRepository: PeopleRepository
 ) : LiveCoroutinesViewModel() {

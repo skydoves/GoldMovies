@@ -32,26 +32,26 @@ import org.koin.android.viewmodel.ext.android.viewModel
 
 class PersonDetailActivity : DatabindingActivity() {
 
-  private val vm by viewModel<PersonDetailViewModel>()
-  private val binding by binding<ActivityPersonDetailBinding>(R.layout.activity_person_detail)
+  private val viewModel: PersonDetailViewModel by viewModel()
+  private val binding: ActivityPersonDetailBinding by binding(R.layout.activity_person_detail)
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     // post the person id from intent
-    vm.postPersonId(intent.getIntExtra(person, 0))
+    viewModel.postPersonId(intent.getIntExtra(person, 0))
     // binding data into layout view
     with(binding) {
       lifecycleOwner = this@PersonDetailActivity
       activity = this@PersonDetailActivity
-      viewModel = vm
-      person = vm.getPerson()
+      viewModel = this@PersonDetailActivity.viewModel
+      person = viewModel.getPerson()
     }
     // observe error messages
     observeMessages()
   }
 
   private fun observeMessages() =
-    this.vm.toastLiveData.observe(this) { toast(it) }
+    this.viewModel.toastLiveData.observe(this) { toast(it) }
 
   companion object {
     const val person = "person"
@@ -59,16 +59,14 @@ class PersonDetailActivity : DatabindingActivity() {
 
     fun startActivity(activity: Activity?, personId: Int, view: View) {
       if (activity != null) {
+        val intent = Intent(activity, PersonDetailActivity::class.java)
+        intent.putExtra(person, personId)
         if (checkIsMaterialVersion()) {
-          val intent = Intent(activity, PersonDetailActivity::class.java)
           ViewCompat.getTransitionName(view)?.let {
             val options = ActivityOptionsCompat.makeSceneTransitionAnimation(activity, view, it)
-            intent.putExtra(person, personId)
             activity.startActivityForResult(intent, intent_requestCode, options.toBundle())
           }
         } else {
-          val intent = Intent(activity, PersonDetailActivity::class.java)
-          intent.putExtra(person, personId)
           activity.startActivity(intent)
         }
       }

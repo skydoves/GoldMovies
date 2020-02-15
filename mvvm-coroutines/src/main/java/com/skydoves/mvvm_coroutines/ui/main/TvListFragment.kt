@@ -35,7 +35,7 @@ import org.koin.android.viewmodel.ext.android.viewModel
 
 class TvListFragment : DatabindingFragment(), TvListViewHolder.Delegate {
 
-  private val viewModel by viewModel<MainActivityViewModel>()
+  private val viewModel: MainActivityViewModel by viewModel()
 
   override fun onCreateView(
     inflater: LayoutInflater,
@@ -46,6 +46,7 @@ class TvListFragment : DatabindingFragment(), TvListViewHolder.Delegate {
       inflater, R.layout.fragment_tv, container).apply {
       viewModel = this@TvListFragment.viewModel
       lifecycleOwner = this@TvListFragment
+      adapter = TvListAdapter(this@TvListFragment)
     }.root
   }
 
@@ -57,7 +58,6 @@ class TvListFragment : DatabindingFragment(), TvListViewHolder.Delegate {
   }
 
   private fun initializeUI() {
-    recyclerView.adapter = TvListAdapter(this)
     RecyclerViewPaginator(
       recyclerView = recyclerView,
       isLoading = { viewModel.isLoading() },

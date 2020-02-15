@@ -29,19 +29,19 @@ import org.koin.android.viewmodel.ext.android.viewModel
 
 class TvDetailActivity : DatabindingActivity() {
 
-  private val vm by viewModel<TvDetailViewModel>()
-  private val binding by binding<ActivityTvDetailBinding>(R.layout.activity_tv_detail)
+  private val viewModel: TvDetailViewModel by viewModel()
+  private val binding: ActivityTvDetailBinding by binding(R.layout.activity_tv_detail)
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     // post the tv id from intent
-    vm.postTvId(intent.getIntExtra(tv, 0))
+    viewModel.postTvId(intent.getIntExtra(tv, 0))
     // binding data into layout view
     with(binding) {
       lifecycleOwner = this@TvDetailActivity
       activity = this@TvDetailActivity
-      viewModel = vm
-      tv = vm.getTv()
+      viewModel = this@TvDetailActivity.viewModel
+      tv = viewModel.getTv()
     }
     // observe error messages
     observeMessages()
@@ -53,13 +53,12 @@ class TvDetailActivity : DatabindingActivity() {
   }
 
   private fun observeMessages() =
-    this.vm.toastLiveData.observe(this) { toast(it) }
+    this.viewModel.toastLiveData.observe(this) { toast(it) }
 
   companion object {
     private const val tv = "tv"
     fun startActivityModel(context: Context?, tvId: Int) {
-      val intent = Intent(context, TvDetailActivity::class.java)
-      intent.putExtra(tv, tvId)
+      val intent = Intent(context, TvDetailActivity::class.java).apply { putExtra(tv, tvId) }
       context?.startActivity(intent)
     }
   }

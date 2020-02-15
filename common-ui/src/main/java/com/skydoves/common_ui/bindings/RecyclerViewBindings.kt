@@ -21,6 +21,7 @@ import android.net.Uri
 import android.view.View
 import androidx.databinding.BindingAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.skydoves.baserecyclerviewadapter.BaseAdapter
 import com.skydoves.common_ui.PosterPath
 import com.skydoves.common_ui.adapters.MovieListAdapter
 import com.skydoves.common_ui.adapters.PeopleAdapter
@@ -34,6 +35,11 @@ import com.skydoves.entity.entities.Movie
 import com.skydoves.entity.entities.Person
 import com.skydoves.entity.entities.Tv
 import com.skydoves.whatif.whatIfNotNullOrEmpty
+
+@BindingAdapter("adapter")
+fun bindAdapter(view: RecyclerView, baseAdapter: BaseAdapter) {
+  view.adapter = baseAdapter
+}
 
 @BindingAdapter("adapterMovieList")
 fun bindAdapterMovieList(view: RecyclerView, movies: List<Movie>?) {

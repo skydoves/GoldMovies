@@ -35,7 +35,7 @@ import org.koin.android.viewmodel.ext.android.viewModel
 
 class PersonListFragment : DatabindingFragment(), PeopleViewHolder.Delegate {
 
-  private val viewModel by viewModel<MainActivityViewModel>()
+  private val viewModel: MainActivityViewModel by viewModel()
 
   override fun onCreateView(
     inflater: LayoutInflater,
@@ -46,6 +46,7 @@ class PersonListFragment : DatabindingFragment(), PeopleViewHolder.Delegate {
       inflater, R.layout.fragment_people, container).apply {
       viewModel = this@PersonListFragment.viewModel
       lifecycleOwner = this@PersonListFragment
+      adapter = PeopleAdapter(this@PersonListFragment)
     }.root
   }
 
@@ -57,7 +58,6 @@ class PersonListFragment : DatabindingFragment(), PeopleViewHolder.Delegate {
   }
 
   private fun initializeUI() {
-    recyclerView.adapter = PeopleAdapter(this)
     RecyclerViewPaginator(
       recyclerView = recyclerView,
       isLoading = { viewModel.isLoading() },

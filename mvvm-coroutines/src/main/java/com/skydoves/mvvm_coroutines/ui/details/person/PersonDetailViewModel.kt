@@ -25,8 +25,9 @@ import com.skydoves.mvvm_coroutines.base.LiveCoroutinesViewModel
 import com.skydoves.mvvm_coroutines.repository.PeopleRepository
 import timber.log.Timber
 
-class PersonDetailViewModel
-constructor(private val peopleRepository: PeopleRepository) : LiveCoroutinesViewModel() {
+class PersonDetailViewModel constructor(
+  private val peopleRepository: PeopleRepository
+) : LiveCoroutinesViewModel() {
 
   private val personIdLiveData: MutableLiveData<Int> = MutableLiveData()
   val personLiveData: LiveData<PersonDetail>

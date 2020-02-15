@@ -42,7 +42,7 @@ import org.koin.android.viewmodel.ext.android.viewModel
 class MainActivity : AppCompatActivity(),
   MovieFavouriteListViewHolder.Delegate, TvFavouriteListViewHolder.Delegate {
 
-  private val viewModel by viewModel<MainActivityViewModel>()
+  private val viewModel: MainActivityViewModel by viewModel()
 
   private val adapterMovieList = MovieFavouriteListAdapter(this)
   private val adapterTvList = TvFavouriteListAdapter(this)

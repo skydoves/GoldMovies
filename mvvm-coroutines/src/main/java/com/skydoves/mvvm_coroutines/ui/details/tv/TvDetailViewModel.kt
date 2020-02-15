@@ -28,8 +28,9 @@ import com.skydoves.mvvm_coroutines.base.LiveCoroutinesViewModel
 import com.skydoves.mvvm_coroutines.repository.TvRepository
 import timber.log.Timber
 
-class TvDetailViewModel
-constructor(private val tvRepository: TvRepository) : LiveCoroutinesViewModel() {
+class TvDetailViewModel constructor(
+  private val tvRepository: TvRepository
+) : LiveCoroutinesViewModel() {
 
   private val tvIdLiveData: MutableLiveData<Int> = MutableLiveData()
   val keywordListLiveData: LiveData<List<Keyword>>

@@ -28,8 +28,9 @@ import com.skydoves.mvvm_coroutines.base.LiveCoroutinesViewModel
 import com.skydoves.mvvm_coroutines.repository.MovieRepository
 import timber.log.Timber
 
-class MovieDetailViewModel
-constructor(private val movieRepository: MovieRepository) : LiveCoroutinesViewModel() {
+class MovieDetailViewModel constructor(
+  private val movieRepository: MovieRepository
+) : LiveCoroutinesViewModel() {
 
   private val movieIdLiveData: MutableLiveData<Int> = MutableLiveData()
   val keywordListLiveData: LiveData<List<Keyword>>

@@ -35,7 +35,7 @@ import org.koin.android.viewmodel.ext.android.viewModel
 
 class MovieListFragment : DatabindingFragment(), MovieListViewHolder.Delegate {
 
-  private val viewModel by viewModel<MainActivityViewModel>()
+  private val viewModel: MainActivityViewModel by viewModel()
 
   override fun onCreateView(
     inflater: LayoutInflater,
@@ -46,6 +46,7 @@ class MovieListFragment : DatabindingFragment(), MovieListViewHolder.Delegate {
       inflater, R.layout.fragment_movie, container).apply {
       viewModel = this@MovieListFragment.viewModel
       lifecycleOwner = this@MovieListFragment
+      adapter = MovieListAdapter(this@MovieListFragment)
     }.root
   }
 
@@ -57,7 +58,6 @@ class MovieListFragment : DatabindingFragment(), MovieListViewHolder.Delegate {
   }
 
   private fun initializeUI() {
-    recyclerView.adapter = MovieListAdapter(this)
     RecyclerViewPaginator(
       recyclerView = recyclerView,
       isLoading = { viewModel.isLoading() },
