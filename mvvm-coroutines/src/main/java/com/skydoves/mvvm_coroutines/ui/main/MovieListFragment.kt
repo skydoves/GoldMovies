@@ -71,8 +71,8 @@ class MovieListFragment : DatabindingFragment(), MovieListViewHolder.Delegate {
 
   private fun loadMore(page: Int) = this.viewModel.postMoviePage(page)
 
-  override fun onItemClick(movie: Movie) =
-    MovieDetailActivity.startActivityModel(requireContext(), movie.id)
+  override fun onItemClick(view: View, movie: Movie) =
+    MovieDetailActivity.startActivityModel(requireContext(), view, movie)
 
   private fun observeMessages() =
     this.viewModel.toastLiveData.observe(this) { context?.toast(it) }

@@ -16,12 +16,17 @@
 
 package com.skydoves.mvvm.ui.details.movie
 
+import android.app.Activity
+import android.app.ActivityOptions
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.MenuItem
+import android.view.View
 import androidx.lifecycle.observe
+import com.skydoves.common_ui.extensions.applyMaterialTransform
 import com.skydoves.common_ui.extensions.toast
+import com.skydoves.entity.entities.Movie
 import com.skydoves.mvvm.R
 import com.skydoves.mvvm.base.ViewModelActivity
 import com.skydoves.mvvm.databinding.ActivityMovieDetailBinding
@@ -29,13 +34,17 @@ import com.skydoves.mvvm.databinding.ActivityMovieDetailBinding
 class MovieDetailActivity : ViewModelActivity() {
 
   private val vm: MovieDetailViewModel by injectViewModels()
-  private val binding
-    by binding<ActivityMovieDetailBinding>(R.layout.activity_movie_detail)
+  private val binding: ActivityMovieDetailBinding by binding(R.layout.activity_movie_detail)
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
+
     // post the movie id from intent
-    vm.postMovieId(intent.getIntExtra(movie, 0))
+    vm.postMovieId(intent.getIntExtra(movieKey, 0))
+
+    // apply material container transform
+    applyMaterialTransform(vm.getMovie().title)
+
     // binding data into layout view
     with(binding) {
       lifecycleOwner = this@MovieDetailActivity
@@ -43,6 +52,7 @@ class MovieDetailActivity : ViewModelActivity() {
       viewModel = vm
       movie = vm.getMovie()
     }
+
     // observe error messages
     observeMessages()
   }
@@ -56,11 +66,15 @@ class MovieDetailActivity : ViewModelActivity() {
     this.vm.toastLiveData.observe(this) { toast(it) }
 
   companion object {
-    private const val movie = "movie"
-    fun startActivityModel(context: Context?, movieId: Int) {
-      val intent = Intent(context, MovieDetailActivity::class.java)
-      intent.putExtra(movie, movieId)
-      context?.startActivity(intent)
+    private const val movieKey = "movie"
+    fun startActivityModel(context: Context?, startView: View, movie: Movie) {
+      if (context is Activity) {
+        val intent = Intent(context, MovieDetailActivity::class.java)
+        intent.putExtra(movieKey, movie.id)
+        val options = ActivityOptions.makeSceneTransitionAnimation(context,
+          startView, movie.title)
+        context.startActivity(intent, options.toBundle())
+      }
     }
   }
 }

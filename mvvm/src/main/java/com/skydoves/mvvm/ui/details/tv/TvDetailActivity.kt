@@ -29,8 +29,7 @@ import com.skydoves.mvvm.databinding.ActivityTvDetailBinding
 class TvDetailActivity : ViewModelActivity() {
 
   private val vm: TvDetailViewModel by injectViewModels()
-  private val binding
-    by binding<ActivityTvDetailBinding>(R.layout.activity_tv_detail)
+  private val binding: ActivityTvDetailBinding by binding(R.layout.activity_tv_detail)
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)

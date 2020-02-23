@@ -32,8 +32,7 @@ import com.skydoves.mvvm.databinding.ActivityPersonDetailBinding
 class PersonDetailActivity : ViewModelActivity() {
 
   private val vm: PersonDetailViewModel by injectViewModels()
-  private val binding
-    by binding<ActivityPersonDetailBinding>(R.layout.activity_person_detail)
+  private val binding: ActivityPersonDetailBinding by binding(R.layout.activity_person_detail)
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)

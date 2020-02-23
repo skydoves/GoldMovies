@@ -17,10 +17,12 @@
 package com.skydoves.mvvm.ui.main
 
 import android.os.Bundle
+import android.view.View
 import androidx.viewpager.widget.ViewPager
 import com.skydoves.common_ui.adapters.MovieFavouriteListAdapter
 import com.skydoves.common_ui.adapters.TvFavouriteListAdapter
 import com.skydoves.common_ui.customs.FlourishFactory
+import com.skydoves.common_ui.extensions.applyExitMaterialTransform
 import com.skydoves.common_ui.viewholders.MovieFavouriteListViewHolder
 import com.skydoves.common_ui.viewholders.TvFavouriteListViewHolder
 import com.skydoves.entity.entities.Movie
@@ -57,6 +59,7 @@ class MainActivity : ViewModelActivity(), HasAndroidInjector,
   }
 
   override fun onCreate(savedInstanceState: Bundle?) {
+    applyExitMaterialTransform()
     super.onCreate(savedInstanceState)
     setContentView(R.layout.activity_main)
     initializeUI()
@@ -109,8 +112,8 @@ class MainActivity : ViewModelActivity(), HasAndroidInjector,
     this.adapterTvList.addTvList(viewModel.getFavouriteTvList())
   }
 
-  override fun onItemClick(movie: Movie) =
-    MovieDetailActivity.startActivityModel(this, movie.id)
+  override fun onItemClick(view: View, movie: Movie) =
+    MovieDetailActivity.startActivityModel(this, view, movie)
 
   override fun onItemClick(tv: Tv) =
     TvDetailActivity.startActivityModel(this, tv.id)

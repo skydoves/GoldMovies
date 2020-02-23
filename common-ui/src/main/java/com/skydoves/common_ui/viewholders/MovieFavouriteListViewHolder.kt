@@ -17,6 +17,7 @@
 package com.skydoves.common_ui.viewholders
 
 import android.view.View
+import androidx.core.view.ViewCompat
 import com.skydoves.baserecyclerviewadapter.BaseViewHolder
 import com.skydoves.common_ui.databinding.ItemMovieFavouriteBinding
 import com.skydoves.entity.entities.Movie
@@ -29,7 +30,7 @@ class MovieFavouriteListViewHolder(
 ) : BaseViewHolder(view) {
 
   interface Delegate {
-    fun onItemClick(movie: Movie)
+    fun onItemClick(view: View, movie: Movie)
   }
 
   private lateinit var movie: Movie
@@ -39,14 +40,15 @@ class MovieFavouriteListViewHolder(
     if (data is Movie) {
       movie = data
       binding.apply {
+        ViewCompat.setTransitionName(binding.itemMovieContainer, data.title)
         movie = data
-        palette = itemView.item_poster_palette
+        palette = itemPosterPalette
         executePendingBindings()
       }
     }
   }
 
-  override fun onClick(v: View?) = delegate.onItemClick(movie)
+  override fun onClick(v: View?) = delegate.onItemClick(binding.itemMovieContainer, movie)
 
   override fun onLongClick(v: View?) = false
 }

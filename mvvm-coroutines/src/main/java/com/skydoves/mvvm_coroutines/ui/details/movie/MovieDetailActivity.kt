@@ -16,12 +16,17 @@
 
 package com.skydoves.mvvm_coroutines.ui.details.movie
 
+import android.app.Activity
+import android.app.ActivityOptions
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.MenuItem
+import android.view.View
 import androidx.lifecycle.observe
+import com.skydoves.common_ui.extensions.applyMaterialTransform
 import com.skydoves.common_ui.extensions.toast
+import com.skydoves.entity.entities.Movie
 import com.skydoves.mvvm_coroutines.R
 import com.skydoves.mvvm_coroutines.base.DatabindingActivity
 import com.skydoves.mvvm_coroutines.databinding.ActivityMovieDetailBinding
@@ -34,8 +39,13 @@ class MovieDetailActivity : DatabindingActivity() {
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
+
     // post the movie id from intent
-    viewModel.postMovieId(intent.getIntExtra(movie, 0))
+    viewModel.postMovieId(intent.getIntExtra(movieKey, 0))
+
+    // apply material container transform
+    applyMaterialTransform(viewModel.getMovie().title)
+
     // binding data into layout view
     with(binding) {
       lifecycleOwner = this@MovieDetailActivity
@@ -43,6 +53,7 @@ class MovieDetailActivity : DatabindingActivity() {
       viewModel = this@MovieDetailActivity.viewModel
       movie = this@MovieDetailActivity.viewModel.getMovie()
     }
+
     // observe error messages
     observeMessages()
   }
@@ -56,11 +67,15 @@ class MovieDetailActivity : DatabindingActivity() {
     this.viewModel.toastLiveData.observe(this) { toast(it) }
 
   companion object {
-    private const val movie = "movie"
-    fun startActivityModel(context: Context?, movieId: Int) {
-      val intent =
-        Intent(context, MovieDetailActivity::class.java).apply { putExtra(movie, movieId) }
-      context?.startActivity(intent)
+    private const val movieKey = "movie"
+    fun startActivityModel(context: Context?, startView: View, movie: Movie) {
+      if (context is Activity) {
+        val intent = Intent(context, MovieDetailActivity::class.java)
+        intent.putExtra(movieKey, movie.id)
+        val options = ActivityOptions.makeSceneTransitionAnimation(context,
+          startView, movie.title)
+        context.startActivity(intent, options.toBundle())
+      }
     }
   }
 }
