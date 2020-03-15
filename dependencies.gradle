@@ -17,11 +17,11 @@ ext.versions = [
 
     // architecture components
     activityKtxVersion       : '1.1.0',
-    fragmentKtxVersion       : '1.2.1',
+    fragmentKtxVersion       : '1.2.2',
     activityVersion          : '1.1.0-rc03',
     archCompomentVersion     : '2.0.0',
     lifecycleVersion         : '2.2.0',
-    roomVersion              : '2.2.3',
+    roomVersion              : '2.2.4',
 
     // di
     daggerVersion            : '2.26',

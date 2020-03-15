@@ -40,10 +40,8 @@ fun AppCompatActivity.simpleToolbarWithHome(toolbar: Toolbar, title_: String = "
 fun AppCompatActivity.getContentTransform(): MaterialContainerTransform {
   return MaterialContainerTransform(this).apply {
     addTarget(android.R.id.content)
-    duration = 350
+    duration = 400
     pathMotion = MaterialArcMotion()
-    fitMode = MaterialContainerTransform.FIT_MODE_AUTO
-    fadeMode = MaterialContainerTransform.FADE_MODE_CROSS
   }
 }
 
