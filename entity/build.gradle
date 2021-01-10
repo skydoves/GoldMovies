@@ -43,6 +43,9 @@ dependencies {
     testImplementation "androidx.room:room-testing:$versions.roomVersion"
     testImplementation "androidx.arch.core:core-testing:$versions.archCompomentVersion"
 
+    // gson converter
+    api "com.squareup.retrofit2:converter-gson:$versions.retrofitVersion"
+
     // timestamp
     api "com.jakewharton.threetenabp:threetenabp:$versions.threetenabpVersion"
 
