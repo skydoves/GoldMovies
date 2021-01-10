@@ -55,6 +55,9 @@ dependencies {
     api "com.squareup.retrofit2:converter-gson:$versions.retrofitVersion"
     testImplementation "com.squareup.okhttp3:mockwebserver:$versions.okhttpVersion"
 
+    // coroutines
+    api "org.jetbrains.kotlinx:kotlinx-coroutines-android:$versions.coroutinesVersion"
+
     // unit test
     testImplementation "junit:junit:$versions.junitVersion"
     testImplementation "androidx.test:core:$versions.androidxTest"

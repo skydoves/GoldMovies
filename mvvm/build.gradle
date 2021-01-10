@@ -75,11 +75,6 @@ dependencies {
     kapt "com.google.dagger:dagger-compiler:$versions.daggerVersion"
     kapt "com.google.dagger:dagger-android-processor:$versions.daggerVersion"
 
-    // coroutines
-    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$versions.coroutinesVersion"
-    testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$versions.coroutinesVersion"
-    testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:$versions.coroutinesVersion"
-
     // debugging
     implementation "com.jakewharton.timber:timber:$versions.timberVersion"
 
@@ -88,6 +83,8 @@ dependencies {
     testImplementation "androidx.test:core:$versions.androidxTest"
     testImplementation "org.robolectric:robolectric:$versions.robolectricVersion"
     testImplementation "com.nhaarman.mockitokotlin2:mockito-kotlin:$versions.mockitoKotlinVersion"
+    testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$versions.coroutinesVersion"
+    testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:$versions.coroutinesVersion"
 }
 
 apply from: '../spotless.gradle'
