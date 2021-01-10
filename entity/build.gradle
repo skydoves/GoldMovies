@@ -37,17 +37,11 @@ android {
 }
 
 dependencies {
-    // kotlin
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$versions.kotlin"
-
     // database
     implementation "androidx.room:room-runtime:$versions.roomVersion"
     kapt "androidx.room:room-compiler:$versions.roomVersion"
     testImplementation "androidx.room:room-testing:$versions.roomVersion"
     testImplementation "androidx.arch.core:core-testing:$versions.archCompomentVersion"
-
-    // gson converter
-    api "com.squareup.retrofit2:converter-gson:$versions.retrofitVersion"
 
     // timestamp
     api "com.jakewharton.threetenabp:threetenabp:$versions.threetenabpVersion"

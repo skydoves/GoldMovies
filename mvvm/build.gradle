@@ -13,11 +13,18 @@ android {
         versionCode versions.versionCode
         versionName versions.versionName
     }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
     kotlinOptions {
         jvmTarget = "1.8"
     }
     dataBinding {
         enabled = true
+    }
+    lintOptions {
+        abortOnError false
     }
     sourceSets {
         androidTest.java.srcDirs += "$rootDir/test-common/java"
@@ -26,6 +33,7 @@ android {
     testOptions {
         unitTests {
             includeAndroidResources = true
+            returnDefaultValues = true
         }
     }
 }
@@ -35,9 +43,6 @@ dependencies {
     implementation project(":entity")
     implementation project(":network")
     implementation project(":common-ui")
-
-    // kotlin
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$versions.kotlin"
 
     // architecture components
     implementation "androidx.activity:activity-ktx:$versions.activityKtxVersion"
@@ -54,6 +59,11 @@ dependencies {
     implementation "com.google.dagger:dagger-android-support:$versions.daggerVersion"
     kapt "com.google.dagger:dagger-compiler:$versions.daggerVersion"
     kapt "com.google.dagger:dagger-android-processor:$versions.daggerVersion"
+
+    // coroutines
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$versions.coroutinesVersion"
+    testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$versions.coroutinesVersion"
+    testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:$versions.coroutinesVersion"
 
     // debugging
     implementation "com.jakewharton.timber:timber:$versions.timberVersion"

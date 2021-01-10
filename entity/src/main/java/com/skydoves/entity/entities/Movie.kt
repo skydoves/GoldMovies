@@ -18,7 +18,6 @@ package com.skydoves.entity.entities
 
 import android.os.Parcelable
 import androidx.room.Entity
-import androidx.room.PrimaryKey
 import com.skydoves.entity.Keyword
 import com.skydoves.entity.Review
 import com.skydoves.entity.Video
@@ -34,7 +33,7 @@ import kotlinx.android.parcel.Parcelize
  * You can get a valid list of certifications from the  method.
  */
 @Parcelize
-@Entity
+@Entity(primaryKeys = [("id")])
 data class Movie(
   var page: Int,
   var keywords: List<Keyword>? = ArrayList(),
@@ -45,7 +44,7 @@ data class Movie(
   val overview: String,
   val release_date: String?,
   val genre_ids: List<Int>,
-  @PrimaryKey val id: Int,
+  val id: Int,
   val original_title: String,
   val original_language: String,
   val title: String,

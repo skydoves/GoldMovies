@@ -49,12 +49,10 @@ dependencies {
     // module dependencies
     implementation project(":entity")
 
-    // kotlin
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$versions.kotlin"
-
     // network
-    api "com.squareup.retrofit2:retrofit:$versions.retrofitVersion"
+    api "com.github.skydoves:sandwich:$versions.sandwichVersion"
     api "com.squareup.okhttp3:logging-interceptor:$versions.okhttpVersion"
+    api "com.squareup.retrofit2:converter-gson:$versions.retrofitVersion"
     testImplementation "com.squareup.okhttp3:mockwebserver:$versions.okhttpVersion"
 
     // unit test

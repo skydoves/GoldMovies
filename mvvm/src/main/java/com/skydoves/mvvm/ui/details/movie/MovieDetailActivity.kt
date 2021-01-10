@@ -57,8 +57,8 @@ class MovieDetailActivity : ViewModelActivity() {
     observeMessages()
   }
 
-  override fun onOptionsItemSelected(item: MenuItem?): Boolean {
-    if (item?.itemId == android.R.id.home) onBackPressed()
+  override fun onOptionsItemSelected(item: MenuItem): Boolean {
+    if (item.itemId == android.R.id.home) onBackPressed()
     return false
   }
 
