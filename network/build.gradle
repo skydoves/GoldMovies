@@ -58,6 +58,12 @@ dependencies {
     // coroutines
     api "org.jetbrains.kotlinx:kotlinx-coroutines-android:$versions.coroutinesVersion"
 
+    // whatIf
+    api "com.github.skydoves:whatif:$versions.whatIfVersion"
+
+    // debugging
+    implementation "com.jakewharton.timber:timber:$versions.timberVersion"
+
     // unit test
     testImplementation "junit:junit:$versions.junitVersion"
     testImplementation "androidx.test:core:$versions.androidxTest"

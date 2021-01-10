@@ -19,7 +19,7 @@ package com.skydoves.network.service
 import com.skydoves.entity.response.KeywordListResponse
 import com.skydoves.entity.response.ReviewListResponse
 import com.skydoves.entity.response.VideoListResponse
-import retrofit2.Call
+import com.skydoves.sandwich.ApiResponse
 import retrofit2.http.GET
 import retrofit2.http.Path
 
@@ -35,7 +35,7 @@ interface MovieService {
    * @return [KeywordListResponse] response
    */
   @GET("/3/movie/{movie_id}/keywords")
-  fun fetchKeywords(@Path("movie_id") id: Int): Call<KeywordListResponse>
+  fun fetchKeywords(@Path("movie_id") id: Int): ApiResponse<KeywordListResponse>
 
   /**
    * [Movie Videos](https://developers.themoviedb.org/3/movies/get-movie-videos)
@@ -47,7 +47,7 @@ interface MovieService {
    * @return [VideoListResponse] response
    */
   @GET("/3/movie/{movie_id}/videos")
-  fun fetchVideos(@Path("movie_id") id: Int): Call<VideoListResponse>
+  fun fetchVideos(@Path("movie_id") id: Int): ApiResponse<VideoListResponse>
 
   /**
    * [Movie Reviews](https://developers.themoviedb.org/3/movies/get-movie-reviews)
@@ -59,5 +59,5 @@ interface MovieService {
    * @return [ReviewListResponse] response
    */
   @GET("/3/movie/{movie_id}/reviews")
-  fun fetchReviews(@Path("movie_id") id: Int): Call<ReviewListResponse>
+  fun fetchReviews(@Path("movie_id") id: Int): ApiResponse<ReviewListResponse>
 }

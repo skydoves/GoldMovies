@@ -16,8 +16,11 @@
 
 package com.skydoves.mvvm_coroutines.ui.main
 
+import androidx.annotation.MainThread
+import androidx.databinding.ObservableBoolean
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.asLiveData
 import androidx.lifecycle.switchMap
 import com.skydoves.entity.entities.Movie
 import com.skydoves.entity.entities.Person
@@ -25,6 +28,8 @@ import com.skydoves.entity.entities.Tv
 import com.skydoves.mvvm_coroutines.base.LiveCoroutinesViewModel
 import com.skydoves.mvvm_coroutines.repository.DiscoverRepository
 import com.skydoves.mvvm_coroutines.repository.PeopleRepository
+import com.skydoves.network.extensions.setValue
+import kotlinx.coroutines.flow.MutableStateFlow
 import timber.log.Timber
 
 class MainActivityViewModel constructor(
@@ -32,48 +37,60 @@ class MainActivityViewModel constructor(
   private val peopleRepository: PeopleRepository
 ) : LiveCoroutinesViewModel() {
 
-  private var moviePageLiveData: MutableLiveData<Int> = MutableLiveData()
-  val movieListLiveData: LiveData<List<Movie>>
+  private var moviePageStateFlow: MutableStateFlow<Int> = MutableStateFlow(0)
+  val movieListLiveData: LiveData<List<Movie>?>
 
-  private var tvPageLiveData: MutableLiveData<Int> = MutableLiveData()
-  val tvListLiveData: LiveData<List<Tv>>
+  private var tvPageStateFlow: MutableStateFlow<Int> = MutableStateFlow(0)
+  val tvListLiveData: LiveData<List<Tv>?>
 
-  private var peoplePageLiveData: MutableLiveData<Int> = MutableLiveData()
+  private var peoplePageStateFlow: MutableStateFlow<Int> = MutableStateFlow(0)
   val peopleLiveData: LiveData<List<Person>>
+
+  val isLoading: ObservableBoolean = ObservableBoolean(false)
 
   val toastLiveData: MutableLiveData<String> = MutableLiveData()
 
   init {
     Timber.d("injection MainActivityViewModel")
 
-    this.movieListLiveData = this.moviePageLiveData.switchMap { page ->
+    this.movieListLiveData = this.moviePageStateFlow.asLiveData().switchMap { page ->
       launchOnViewModelScope {
-        this.discoverRepository.loadMovies(page) { this.toastLiveData.postValue(it) }
+        isLoading.set(true)
+        this.discoverRepository.loadMovies(page) {
+          isLoading.set(false)
+        }.asLiveData()
       }
     }
 
-    this.tvListLiveData = this.tvPageLiveData.switchMap { page ->
+    this.tvListLiveData = this.tvPageStateFlow.asLiveData().switchMap { page ->
       launchOnViewModelScope {
-        this.discoverRepository.loadTvs(page) { this.toastLiveData.postValue(it) }
+        isLoading.set(true)
+        this.discoverRepository.loadTvs(page) {
+          isLoading.set(false)
+        }.asLiveData()
       }
     }
 
-    this.peopleLiveData = this.peoplePageLiveData.switchMap { page ->
+    this.peopleLiveData = this.peoplePageStateFlow.asLiveData().switchMap { page ->
       launchOnViewModelScope {
-        this.peopleRepository.loadPeople(page) { this.toastLiveData.postValue(it) }
+        isLoading.set(true)
+        this.peopleRepository.loadPeople(page) {
+          isLoading.set(false)
+        }.asLiveData()
       }
     }
   }
 
-  fun postMoviePage(page: Int) = this.moviePageLiveData.postValue(page)
+  @MainThread
+  fun postMoviePage(page: Int) = this.moviePageStateFlow.setValue(page)
 
-  fun postTvPage(page: Int) = this.tvPageLiveData.postValue(page)
+  @MainThread
+  fun postTvPage(page: Int) = this.tvPageStateFlow.setValue(page)
 
-  fun postPeoplePage(page: Int) = this.peoplePageLiveData.postValue(page)
+  @MainThread
+  fun postPeoplePage(page: Int) = this.peoplePageStateFlow.setValue(page)
 
   fun getFavouriteMovieList() = this.discoverRepository.getFavouriteMovieList()
 
   fun getFavouriteTvList() = this.discoverRepository.getFavouriteTvList()
-
-  fun isLoading() = this.discoverRepository.isLoading || this.peopleRepository.isLoading
 }

@@ -18,10 +18,6 @@ package com.skydoves.mvvm_coroutines.di
 
 import com.skydoves.network.EndPoint
 import com.skydoves.network.RequestInterceptor
-import com.skydoves.network.client.MovieClient
-import com.skydoves.network.client.PeopleClient
-import com.skydoves.network.client.TheDiscoverClient
-import com.skydoves.network.client.TvClient
 import com.skydoves.network.service.MovieService
 import com.skydoves.network.service.PeopleService
 import com.skydoves.network.service.TheDiscoverService
@@ -48,17 +44,9 @@ val networkModule = module {
 
   single { get<Retrofit>().create(TheDiscoverService::class.java) }
 
-  single { TheDiscoverClient(get()) }
-
   single { get<Retrofit>().create(PeopleService::class.java) }
-
-  single { PeopleClient(get()) }
 
   single { get<Retrofit>().create(MovieService::class.java) }
 
-  single { MovieClient(get()) }
-
   single { get<Retrofit>().create(TvService::class.java) }
-
-  single { TvClient(get()) }
 }

@@ -14,7 +14,15 @@
  * limitations under the License.
  */
 
-package com.skydoves.mvvm_coroutines.repository
+package com.skydoves.network.model
 
-/** Repository is an interface for configuring base repository classes. */
-interface Repository
+/**
+ * The movie error response is a customized error response model.
+ *
+ * @param code The error response code.
+ * @param message The error response body message.
+ */
+data class TheMovieErrorResponse(
+  val code: Int,
+  val message: String
+)

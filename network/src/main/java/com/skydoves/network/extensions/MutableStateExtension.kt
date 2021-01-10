@@ -14,7 +14,13 @@
  * limitations under the License.
  */
 
-package com.skydoves.mvvm_coroutines.repository
+package com.skydoves.network.extensions
 
-/** Repository is an interface for configuring base repository classes. */
-interface Repository
+import kotlinx.coroutines.flow.MutableStateFlow
+
+/**
+ * set value into the mutable state flow on the main thread.
+ */
+inline fun <reified T> MutableStateFlow<T>.setValue(value: T) {
+  this.value = value
+}

@@ -36,7 +36,7 @@ dependencies {
     implementation "com.github.skydoves:whatif:$versions.whatIfVersion"
 
     // bundler
-    implementation "com.github.skydoves:bundler:$versions.bundlerVersion"
+    api "com.github.skydoves:bundler:$versions.bundlerVersion"
 
     // custom views
     api "com.github.skydoves:flourish:$versions.flourishVersion"
