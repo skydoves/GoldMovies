@@ -22,6 +22,7 @@ import com.skydoves.network.service.MovieService
 import com.skydoves.network.service.PeopleService
 import com.skydoves.network.service.TheDiscoverService
 import com.skydoves.network.service.TvService
+import com.skydoves.sandwich.coroutines.CoroutinesResponseCallAdapterFactory
 import okhttp3.OkHttpClient
 import org.koin.dsl.module
 import retrofit2.Retrofit
@@ -39,6 +40,7 @@ val networkModule = module {
       .client(get<OkHttpClient>())
       .baseUrl(EndPoint.TheMovieDB)
       .addConverterFactory(GsonConverterFactory.create())
+      .addCallAdapterFactory(CoroutinesResponseCallAdapterFactory())
       .build()
   }
 

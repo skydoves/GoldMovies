@@ -35,7 +35,7 @@ interface TheDiscoverService {
    *  @return [DiscoverMovieResponse] response
    */
   @GET("/3/discover/movie?language=en&sort_by=popularity.desc")
-  fun fetchDiscoverMovie(@Query("page") page: Int): ApiResponse<DiscoverMovieResponse>
+  suspend fun fetchDiscoverMovie(@Query("page") page: Int): ApiResponse<DiscoverMovieResponse>
 
   /**
    * [Tv Discover](https://developers.themoviedb.org/3/discover/tv-discover)
@@ -47,5 +47,5 @@ interface TheDiscoverService {
    *  @return [DiscoverTvResponse] response
    */
   @GET("/3/discover/tv?language=en&sort_by=popularity.desc")
-  fun fetchDiscoverTv(@Query("page") page: Int): ApiResponse<DiscoverTvResponse>
+  suspend fun fetchDiscoverTv(@Query("page") page: Int): ApiResponse<DiscoverTvResponse>
 }

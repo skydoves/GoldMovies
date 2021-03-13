@@ -14,19 +14,14 @@
       type="com.skydoves.common_ui.adapters.PeopleAdapter" />
   </data>
 
-  <RelativeLayout
+  <androidx.recyclerview.widget.RecyclerView
+    android:id="@+id/recyclerView"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
-
-    <androidx.recyclerview.widget.RecyclerView
-      android:id="@+id/recyclerView"
-      android:layout_width="match_parent"
-      android:layout_height="match_parent"
-      android:clipToPadding="false"
-      app:adapter="@{adapter}"
-      app:adapterPersonList="@{viewModel.peopleLiveData}"
-      app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
-      app:spanCount="2"
-      tools:listitem="@layout/item_person" />
-  </RelativeLayout>
+    android:layout_height="match_parent"
+    android:clipToPadding="false"
+    app:adapter="@{adapter}"
+    app:adapterPersonList="@{viewModel.peopleLiveData}"
+    app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+    app:spanCount="2"
+    tools:listitem="@layout/item_person" />
 </layout>

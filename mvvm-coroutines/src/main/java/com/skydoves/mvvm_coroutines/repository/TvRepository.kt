@@ -25,6 +25,7 @@ import com.skydoves.whatif.whatIfNotNull
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.flow.onCompletion
 import timber.log.Timber
 
 class TvRepository constructor(
@@ -48,14 +49,12 @@ class TvRepository constructor(
           tv.keywords = keywords
           tvDao.updateTv(tv)
           emit(keywords)
-          success()
         }
       }
     } else {
       emit(keywords)
-      success()
     }
-  }.flowOn(Dispatchers.IO)
+  }.onCompletion { success() }.flowOn(Dispatchers.IO)
 
   @WorkerThread
   fun loadVideoList(id: Int, success: () -> Unit) = flow {
@@ -69,14 +68,12 @@ class TvRepository constructor(
           tv.videos = videos
           tvDao.updateTv(tv)
           emit(videos)
-          success()
         }
       }
     } else {
       emit(videos)
-      success()
     }
-  }.flowOn(Dispatchers.IO)
+  }.onCompletion { success() }.flowOn(Dispatchers.IO)
 
   @WorkerThread
   fun loadReviewsList(id: Int, success: () -> Unit) = flow {
@@ -90,14 +87,12 @@ class TvRepository constructor(
           tv.reviews = reviews
           tvDao.updateTv(tv)
           emit(reviews)
-          success()
         }
       }
     } else {
       emit(reviews)
-      success()
     }
-  }.flowOn(Dispatchers.IO)
+  }.onCompletion { success() }.flowOn(Dispatchers.IO)
 
   fun getTv(id: Int) = tvDao.getTv(id)
 

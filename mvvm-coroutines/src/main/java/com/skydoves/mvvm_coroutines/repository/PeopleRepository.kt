@@ -24,6 +24,7 @@ import com.skydoves.whatif.whatIfNotNull
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.flow.onCompletion
 import timber.log.Timber
 
 class PeopleRepository constructor(
@@ -46,14 +47,12 @@ class PeopleRepository constructor(
           people.forEach { it.page = page }
           peopleDao.insertPeople(people)
           emit(people)
-          success()
         }
       }
     } else {
       emit(people)
-      success()
     }
-  }.flowOn(Dispatchers.IO)
+  }.onCompletion { success() }.flowOn(Dispatchers.IO)
 
   @WorkerThread
   fun loadPersonDetail(id: Int, success: () -> Unit) = flow {
@@ -67,14 +66,12 @@ class PeopleRepository constructor(
           person.personDetail = personDetail
           peopleDao.updatePerson(person)
           emit(personDetail)
-          success()
         }
       }
     } else {
       emit(personDetail)
-      success()
     }
-  }.flowOn(Dispatchers.IO)
+  }.onCompletion { success() }.flowOn(Dispatchers.IO)
 
   @WorkerThread
   fun getPerson(id: Int) = peopleDao.getPerson(id)

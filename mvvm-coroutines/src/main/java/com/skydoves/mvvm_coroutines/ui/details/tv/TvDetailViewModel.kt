@@ -36,7 +36,7 @@ class TvDetailViewModel constructor(
   private val tvRepository: TvRepository
 ) : LiveCoroutinesViewModel() {
 
-  private val tvIdLiveData: MutableStateFlow<Int> = MutableStateFlow(0)
+  private val tvIdStateFlow: MutableStateFlow<Int> = MutableStateFlow(0)
 
   val keywordListLiveData: LiveData<List<Keyword>?>
   val videoListLiveData: LiveData<List<Video>?>
@@ -51,7 +51,7 @@ class TvDetailViewModel constructor(
   init {
     Timber.d("Injection TvDetailViewModel")
 
-    this.keywordListLiveData = tvIdLiveData.asLiveData().switchMap { id ->
+    this.keywordListLiveData = tvIdStateFlow.asLiveData().switchMap { id ->
       launchOnViewModelScope {
         isLoading.set(true)
         tvRepository.loadKeywordList(id) {
@@ -60,7 +60,7 @@ class TvDetailViewModel constructor(
       }
     }
 
-    this.videoListLiveData = tvIdLiveData.asLiveData().switchMap { id ->
+    this.videoListLiveData = tvIdStateFlow.asLiveData().switchMap { id ->
       launchOnViewModelScope {
         isLoading.set(true)
         tvRepository.loadVideoList(id) {
@@ -69,7 +69,7 @@ class TvDetailViewModel constructor(
       }
     }
 
-    this.reviewListLiveData = tvIdLiveData.asLiveData().switchMap { id ->
+    this.reviewListLiveData = tvIdStateFlow.asLiveData().switchMap { id ->
       launchOnViewModelScope {
         isLoading.set(true)
         tvRepository.loadReviewsList(id) {
@@ -81,7 +81,7 @@ class TvDetailViewModel constructor(
 
   @MainThread
   fun postTvId(id: Int) {
-    this.tvIdLiveData.setValue(id)
+    this.tvIdStateFlow.setValue(id)
     this.tv = tvRepository.getTv(id)
     this.favourite.set(this.tv.favourite)
   }

@@ -41,7 +41,7 @@ class PersonListFragment : DatabindingFragment(), PeopleViewHolder.Delegate {
     inflater: LayoutInflater,
     container: ViewGroup?,
     savedInstanceState: Bundle?
-  ): View? {
+  ): View {
     return binding<FragmentPeopleBinding>(
       inflater, R.layout.fragment_people, container).apply {
       viewModel = this@PersonListFragment.viewModel
@@ -60,7 +60,7 @@ class PersonListFragment : DatabindingFragment(), PeopleViewHolder.Delegate {
   private fun initializeUI() {
     RecyclerViewPaginator(
       recyclerView = recyclerView,
-      isLoading = { viewModel.isLoading() },
+      isLoading = { viewModel.isLoading.get() },
       loadMore = { loadMore(it) },
       onLast = { false }
     ).apply {

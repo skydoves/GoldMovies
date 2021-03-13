@@ -35,7 +35,7 @@ interface TvService {
    * @return [VideoListResponse] response
    */
   @GET("/3/tv/{tv_id}/keywords")
-  fun fetchKeywords(@Path("tv_id") id: Int): ApiResponse<KeywordListResponse>
+  suspend fun fetchKeywords(@Path("tv_id") id: Int): ApiResponse<KeywordListResponse>
 
   /**
    * [Tv Videos](https://developers.themoviedb.org/3/tv/get-tv-videos)
@@ -47,7 +47,7 @@ interface TvService {
    * @return [VideoListResponse] response
    */
   @GET("/3/tv/{tv_id}/videos")
-  fun fetchVideos(@Path("tv_id") id: Int): ApiResponse<VideoListResponse>
+  suspend fun fetchVideos(@Path("tv_id") id: Int): ApiResponse<VideoListResponse>
 
   /**
    * [Tv Reviews](https://developers.themoviedb.org/3/tv/get-tv-reviews)
@@ -59,5 +59,5 @@ interface TvService {
    * @return [ReviewListResponse] response
    */
   @GET("/3/tv/{tv_id}/reviews")
-  fun fetchReviews(@Path("tv_id") id: Int): ApiResponse<ReviewListResponse>
+  suspend fun fetchReviews(@Path("tv_id") id: Int): ApiResponse<ReviewListResponse>
 }

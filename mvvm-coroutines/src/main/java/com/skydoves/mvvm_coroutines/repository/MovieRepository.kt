@@ -25,6 +25,7 @@ import com.skydoves.whatif.whatIfNotNull
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.flow.onCompletion
 import timber.log.Timber
 
 class MovieRepository constructor(
@@ -48,14 +49,12 @@ class MovieRepository constructor(
           movie.keywords = keywords
           movieDao.updateMovie(movie)
           emit(keywords)
-          success()
         }
       }
     } else {
       emit(keywords)
-      success()
     }
-  }.flowOn(Dispatchers.IO)
+  }.onCompletion { success() }.flowOn(Dispatchers.IO)
 
   @WorkerThread
   fun loadVideoList(id: Int, success: () -> Unit) = flow {
@@ -69,14 +68,12 @@ class MovieRepository constructor(
           movie.videos = videos
           movieDao.updateMovie(movie)
           emit(videos)
-          success()
         }
       }
     } else {
       emit(videos)
-      success()
     }
-  }.flowOn(Dispatchers.IO)
+  }.onCompletion { success() }.flowOn(Dispatchers.IO)
 
   @WorkerThread
   fun loadReviewsList(id: Int, success: () -> Unit) = flow {
@@ -90,14 +87,12 @@ class MovieRepository constructor(
           movie.reviews = reviews
           movieDao.updateMovie(movie)
           emit(reviews)
-          success()
         }
       }
     } else {
       emit(reviews)
-      success()
     }
-  }.flowOn(Dispatchers.IO)
+  }.onCompletion { success() }.flowOn(Dispatchers.IO)
 
   @WorkerThread
   fun getMovie(id: Int) = movieDao.getMovie(id)

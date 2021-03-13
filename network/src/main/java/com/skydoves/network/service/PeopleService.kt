@@ -35,7 +35,7 @@ interface PeopleService {
    * @return [PeopleResponse] response
    */
   @GET("/3/person/popular?language=en")
-  fun fetchPopularPeople(@Query("page") page: Int): ApiResponse<PeopleResponse>
+  suspend fun fetchPopularPeople(@Query("page") page: Int): ApiResponse<PeopleResponse>
 
   /**
    * [Person Detail](https://developers.themoviedb.org/3/people/get-person-details)
@@ -47,5 +47,5 @@ interface PeopleService {
    * @return [PersonDetail] response
    */
   @GET("/3/person/{person_id}")
-  fun fetchPersonDetail(@Path("person_id") id: Int): ApiResponse<PersonDetail>
+  suspend fun fetchPersonDetail(@Path("person_id") id: Int): ApiResponse<PersonDetail>
 }

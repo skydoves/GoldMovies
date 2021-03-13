@@ -25,6 +25,7 @@ import com.skydoves.whatif.whatIfNotNull
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.flow.onCompletion
 import timber.log.Timber
 
 class DiscoverRepository constructor(
@@ -48,14 +49,12 @@ class DiscoverRepository constructor(
           movies.forEach { it.page = page }
           movieDao.insertMovieList(movies)
           emit(movies)
-          onSuccess()
         }
       }
     } else {
       emit(movies)
-      onSuccess()
     }
-  }.flowOn(Dispatchers.IO)
+  }.onCompletion { onSuccess() }.flowOn(Dispatchers.IO)
 
   @WorkerThread
   fun loadTvs(page: Int, onSuccess: () -> Unit) = flow {
@@ -68,14 +67,12 @@ class DiscoverRepository constructor(
           tvs.forEach { it.page = page }
           tvDao.insertTv(tvs)
           emit(tvs)
-          onSuccess()
         }
       }
     } else {
       emit(tvs)
-      onSuccess()
     }
-  }.flowOn(Dispatchers.IO)
+  }.onCompletion { onSuccess() }.flowOn(Dispatchers.IO)
 
   fun getFavouriteMovieList() = movieDao.getFavouriteMovieList()
 

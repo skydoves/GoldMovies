@@ -60,7 +60,7 @@ class TvListFragment : DatabindingFragment(), TvListViewHolder.Delegate {
   private fun initializeUI() {
     RecyclerViewPaginator(
       recyclerView = recyclerView,
-      isLoading = { viewModel.isLoading() },
+      isLoading = { viewModel.isLoading.get() },
       loadMore = { loadMore(it) },
       onLast = { false }
     ).apply {
