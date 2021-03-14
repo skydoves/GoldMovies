@@ -24,7 +24,7 @@ import androidx.lifecycle.observe
 import com.skydoves.baserecyclerviewadapter.RecyclerViewPaginator
 import com.skydoves.common_ui.adapters.MovieListAdapter
 import com.skydoves.common_ui.extensions.toast
-import com.skydoves.common_ui.viewholders.MovieListViewHolder
+import com.skydoves.common_ui.viewholders.MovieListViewHolderss
 import com.skydoves.entity.entities.Movie
 import com.skydoves.mvvm.R
 import com.skydoves.mvvm.base.ViewModelFragment
@@ -32,7 +32,7 @@ import com.skydoves.mvvm.databinding.FragmentMovieBinding
 import com.skydoves.mvvm.ui.details.movie.MovieDetailActivity
 import kotlinx.android.synthetic.main.fragment_movie.recyclerView
 
-class MovieListFragment : ViewModelFragment(), MovieListViewHolder.Delegate {
+class MovieListFragment : ViewModelFragment(), MovieListViewHolderss.Delegate {
 
   private val viewModel: MainActivityViewModel by injectActivityVIewModels()
 

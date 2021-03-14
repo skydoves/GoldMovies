@@ -20,20 +20,19 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.lifecycle.observe
 import com.skydoves.baserecyclerviewadapter.RecyclerViewPaginator
+import com.skydoves.bindables.BindingFragment
 import com.skydoves.common_ui.adapters.PeopleAdapter
-import com.skydoves.common_ui.extensions.toast
 import com.skydoves.common_ui.viewholders.PeopleViewHolder
 import com.skydoves.entity.entities.Person
 import com.skydoves.mvvm_coroutines.R
-import com.skydoves.mvvm_coroutines.base.DatabindingFragment
 import com.skydoves.mvvm_coroutines.databinding.FragmentPeopleBinding
 import com.skydoves.mvvm_coroutines.ui.details.person.PersonDetailActivity
 import kotlinx.android.synthetic.main.fragment_people.recyclerView
 import org.koin.android.viewmodel.ext.android.viewModel
 
-class PersonListFragment : DatabindingFragment(), PeopleViewHolder.Delegate {
+class PersonListFragment :
+  BindingFragment<FragmentPeopleBinding>(R.layout.fragment_people), PeopleViewHolder.Delegate {
 
   private val viewModel: MainActivityViewModel by viewModel()
 
@@ -42,8 +41,8 @@ class PersonListFragment : DatabindingFragment(), PeopleViewHolder.Delegate {
     container: ViewGroup?,
     savedInstanceState: Bundle?
   ): View {
-    return binding<FragmentPeopleBinding>(
-      inflater, R.layout.fragment_people, container).apply {
+    super.onCreateView(inflater, container, savedInstanceState)
+    return binding {
       viewModel = this@PersonListFragment.viewModel
       lifecycleOwner = this@PersonListFragment
       adapter = PeopleAdapter(this@PersonListFragment)
@@ -53,14 +52,12 @@ class PersonListFragment : DatabindingFragment(), PeopleViewHolder.Delegate {
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
     initializeUI()
-    loadMore(page = 1)
-    observeMessages()
   }
 
   private fun initializeUI() {
     RecyclerViewPaginator(
       recyclerView = recyclerView,
-      isLoading = { viewModel.isLoading.get() },
+      isLoading = { viewModel.isLoading },
       loadMore = { loadMore(it) },
       onLast = { false }
     ).apply {
@@ -73,7 +70,4 @@ class PersonListFragment : DatabindingFragment(), PeopleViewHolder.Delegate {
 
   override fun onItemClick(person: Person, view: View) =
     PersonDetailActivity.startActivity(activity, person.id, view)
-
-  private fun observeMessages() =
-    this.viewModel.toastLiveData.observe(this) { context?.toast(it) }
 }

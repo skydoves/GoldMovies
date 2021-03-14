@@ -19,43 +19,37 @@ package com.skydoves.mvvm_coroutines.ui.details.movie
 import android.app.Activity
 import android.app.ActivityOptions
 import android.content.Context
-import android.content.Intent
 import android.os.Bundle
 import android.view.MenuItem
 import android.view.View
-import androidx.lifecycle.observe
+import com.skydoves.bindables.BindingActivity
+import com.skydoves.bundler.intentOf
 import com.skydoves.common_ui.extensions.applyMaterialTransform
-import com.skydoves.common_ui.extensions.toast
 import com.skydoves.entity.entities.Movie
 import com.skydoves.mvvm_coroutines.R
-import com.skydoves.mvvm_coroutines.base.DatabindingActivity
 import com.skydoves.mvvm_coroutines.databinding.ActivityMovieDetailBinding
 import org.koin.android.viewmodel.ext.android.viewModel
 
-class MovieDetailActivity : DatabindingActivity() {
+class MovieDetailActivity : BindingActivity<ActivityMovieDetailBinding>(
+  R.layout.activity_movie_detail) {
 
   private val viewModel: MovieDetailViewModel by viewModel()
-  private val binding: ActivityMovieDetailBinding by binding(R.layout.activity_movie_detail)
-
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
 
     // post the movie id from intent
-    viewModel.postMovieId(intent.getIntExtra(movieKey, 0))
+    viewModel.postMovieId(intent.getIntExtra(EXTRA_MOVEI_ID, 0))
 
     // apply material container transform
     applyMaterialTransform(viewModel.getMovie().title)
 
     // binding data into layout view
-    with(binding) {
+    binding {
       lifecycleOwner = this@MovieDetailActivity
       activity = this@MovieDetailActivity
       viewModel = this@MovieDetailActivity.viewModel
       movie = this@MovieDetailActivity.viewModel.getMovie()
     }
-
-    // observe error messages
-    observeMessages()
   }
 
   override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -63,18 +57,16 @@ class MovieDetailActivity : DatabindingActivity() {
     return false
   }
 
-  private fun observeMessages() =
-    this.viewModel.toastLiveData.observe(this) { toast(it) }
-
   companion object {
-    private const val movieKey = "movie"
+    private const val EXTRA_MOVEI_ID = "movie"
     fun startActivityModel(context: Context?, startView: View, movie: Movie) {
       if (context is Activity) {
-        val intent = Intent(context, MovieDetailActivity::class.java)
-        intent.putExtra(movieKey, movie.id)
-        val options = ActivityOptions.makeSceneTransitionAnimation(context,
-          startView, movie.title)
-        context.startActivity(intent, options.toBundle())
+        context.intentOf<MovieDetailActivity> {
+          putExtra(EXTRA_MOVEI_ID to movie.id)
+          val options = ActivityOptions.makeSceneTransitionAnimation(context,
+            startView, movie.title)
+          context.startActivity(intent, options.toBundle())
+        }
       }
     }
   }

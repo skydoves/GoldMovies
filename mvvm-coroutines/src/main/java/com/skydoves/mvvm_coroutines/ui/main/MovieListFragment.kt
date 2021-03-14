@@ -21,18 +21,17 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.skydoves.baserecyclerviewadapter.RecyclerViewPaginator
+import com.skydoves.bindables.BindingFragment
 import com.skydoves.common_ui.adapters.MovieListAdapter
-import com.skydoves.common_ui.viewholders.MovieListViewHolder
 import com.skydoves.entity.entities.Movie
 import com.skydoves.mvvm_coroutines.R
-import com.skydoves.mvvm_coroutines.base.DatabindingFragment
 import com.skydoves.mvvm_coroutines.databinding.FragmentMovieBinding
 import com.skydoves.mvvm_coroutines.ui.details.movie.MovieDetailActivity
 import org.koin.android.viewmodel.ext.android.viewModel
 
-class MovieListFragment : DatabindingFragment(), MovieListViewHolder.Delegate {
+class MovieListFragment :
+  BindingFragment<FragmentMovieBinding>(R.layout.fragment_movie), MovieListAdapter.Delegate {
 
-  private lateinit var binding: FragmentMovieBinding
   private val viewModel: MainActivityViewModel by viewModel()
 
   override fun onCreateView(
@@ -40,13 +39,11 @@ class MovieListFragment : DatabindingFragment(), MovieListViewHolder.Delegate {
     container: ViewGroup?,
     savedInstanceState: Bundle?
   ): View {
-    return binding<FragmentMovieBinding>(
-      inflater, R.layout.fragment_movie, container).apply {
+    super.onCreateView(inflater, container, savedInstanceState)
+    return binding {
       viewModel = this@MovieListFragment.viewModel
       lifecycleOwner = this@MovieListFragment
       adapter = MovieListAdapter(this@MovieListFragment)
-    }.apply {
-      this@MovieListFragment.binding = this
     }.root
   }
 
@@ -59,7 +56,7 @@ class MovieListFragment : DatabindingFragment(), MovieListViewHolder.Delegate {
   private fun initializeUI() {
     RecyclerViewPaginator(
       recyclerView = binding.recyclerView,
-      isLoading = { viewModel.isLoading.get() },
+      isLoading = { viewModel.isLoading },
       loadMore = { loadMore(it) },
       onLast = { false }
     ).apply {

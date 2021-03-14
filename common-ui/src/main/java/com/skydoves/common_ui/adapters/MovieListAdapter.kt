@@ -17,28 +17,59 @@
 package com.skydoves.common_ui.adapters
 
 import android.view.View
-import com.skydoves.baserecyclerviewadapter.BaseAdapter
-import com.skydoves.baserecyclerviewadapter.SectionRow
+import android.view.ViewGroup
+import androidx.core.view.ViewCompat
+import androidx.databinding.Bindable
+import androidx.recyclerview.widget.RecyclerView
+import com.skydoves.bindables.BindingRecyclerViewAdapter
+import com.skydoves.bindables.binding
 import com.skydoves.common_ui.R
-import com.skydoves.common_ui.viewholders.MovieListViewHolder
+import com.skydoves.common_ui.databinding.ItemMovieBinding
 import com.skydoves.entity.entities.Movie
 
 /** MovieListAdapter is an adapter class for binding [Movie] items. */
 class MovieListAdapter(
-  private val delegate: MovieListViewHolder.Delegate
-) : BaseAdapter() {
+  private val delegate: Delegate
+) : BindingRecyclerViewAdapter<MovieListAdapter.MovieListViewHolder>() {
 
-  init {
-    addSection(ArrayList<Movie>())
+  private val items: ArrayList<Movie> = arrayListOf()
+
+  @get:Bindable
+  val isEmpty: Boolean
+    get() = items.isEmpty()
+
+  override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MovieListViewHolder {
+    val binding = parent.binding<ItemMovieBinding>(R.layout.item_movie)
+    return MovieListViewHolder(binding).apply {
+      binding.root.setOnClickListener {
+        val position =
+          adapterPosition.takeIf { it != RecyclerView.NO_POSITION } ?: return@setOnClickListener
+        delegate.onItemClick(binding.root, items[position])
+      }
+    }
   }
 
-  fun addMovieList(movies: List<Movie>) {
-    val section = sections()[0]
-    section.addAll(movies)
-    notifyItemRangeInserted(section.size - movies.size + 1, movies.size)
+  override fun onBindViewHolder(holder: MovieListViewHolder, position: Int) {
+    val data = items[position]
+    with(holder.binding) {
+      ViewCompat.setTransitionName(itemMovieContainer, data.title)
+      movie = data
+      palette = itemPosterPalette
+      executePendingBindings()
+    }
   }
 
-  override fun layout(sectionRow: SectionRow) = R.layout.item_movie
+  fun addMovieList(movieItemList: List<Movie>) {
+    items.clear()
+    items.addAll(movieItemList)
+    notifyDataSetChanged()
+  }
 
-  override fun viewHolder(layout: Int, view: View) = MovieListViewHolder(view, delegate)
+  override fun getItemCount(): Int = items.size
+
+  interface Delegate {
+    fun onItemClick(view: View, movie: Movie)
+  }
+
+  class MovieListViewHolder(val binding: ItemMovieBinding) : RecyclerView.ViewHolder(binding.root)
 }

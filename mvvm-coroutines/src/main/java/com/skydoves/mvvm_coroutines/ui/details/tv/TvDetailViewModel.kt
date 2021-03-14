@@ -17,9 +17,9 @@
 package com.skydoves.mvvm_coroutines.ui.details.tv
 
 import androidx.annotation.MainThread
+import androidx.databinding.Bindable
 import androidx.databinding.ObservableBoolean
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.switchMap
 import com.skydoves.entity.Keyword
@@ -41,39 +41,40 @@ class TvDetailViewModel constructor(
   val keywordListLiveData: LiveData<List<Keyword>?>
   val videoListLiveData: LiveData<List<Video>?>
   val reviewListLiveData: LiveData<List<Review>?>
-  val toastLiveData: MutableLiveData<String> = MutableLiveData()
 
   private lateinit var tv: Tv
   val favourite = ObservableBoolean()
 
-  val isLoading: ObservableBoolean = ObservableBoolean(false)
+  @get:Bindable
+  var isLoading: Boolean = false
+    private set
 
   init {
     Timber.d("Injection TvDetailViewModel")
 
     this.keywordListLiveData = tvIdStateFlow.asLiveData().switchMap { id ->
       launchOnViewModelScope {
-        isLoading.set(true)
+        isLoading = true
         tvRepository.loadKeywordList(id) {
-          isLoading.set(false)
+          isLoading = false
         }.asLiveData()
       }
     }
 
     this.videoListLiveData = tvIdStateFlow.asLiveData().switchMap { id ->
       launchOnViewModelScope {
-        isLoading.set(true)
+        isLoading = true
         tvRepository.loadVideoList(id) {
-          isLoading.set(false)
+          isLoading = false
         }.asLiveData()
       }
     }
 
     this.reviewListLiveData = tvIdStateFlow.asLiveData().switchMap { id ->
       launchOnViewModelScope {
-        isLoading.set(true)
+        isLoading = true
         tvRepository.loadReviewsList(id) {
-          isLoading.set(false)
+          isLoading = false
         }.asLiveData()
       }
     }

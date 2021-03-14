@@ -17,9 +17,8 @@
 package com.skydoves.mvvm_coroutines.ui.main
 
 import androidx.annotation.MainThread
-import androidx.databinding.ObservableBoolean
+import androidx.databinding.Bindable
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.switchMap
 import com.skydoves.entity.entities.Movie
@@ -46,36 +45,36 @@ class MainActivityViewModel constructor(
   private var peoplePageStateFlow: MutableStateFlow<Int> = MutableStateFlow(1)
   val peopleLiveData: LiveData<List<Person>>
 
-  val isLoading: ObservableBoolean = ObservableBoolean(false)
-
-  val toastLiveData: MutableLiveData<String> = MutableLiveData()
+  @get:Bindable
+  var isLoading: Boolean = false
+    private set
 
   init {
     Timber.d("injection MainActivityViewModel")
 
     this.movieListLiveData = this.moviePageStateFlow.asLiveData().switchMap { page ->
       launchOnViewModelScope {
-        isLoading.set(true)
+        isLoading = true
         this.discoverRepository.loadMovies(page) {
-          isLoading.set(false)
+          isLoading = false
         }.asLiveData()
       }
     }
 
     this.tvListLiveData = this.tvPageStateFlow.asLiveData().switchMap { page ->
       launchOnViewModelScope {
-        isLoading.set(true)
+        isLoading = true
         this.discoverRepository.loadTvs(page) {
-          isLoading.set(false)
+          isLoading = false
         }.asLiveData()
       }
     }
 
     this.peopleLiveData = this.peoplePageStateFlow.asLiveData().switchMap { page ->
       launchOnViewModelScope {
-        isLoading.set(true)
+        isLoading = true
         this.peopleRepository.loadPeople(page) {
-          isLoading.set(false)
+          isLoading = false
         }.asLiveData()
       }
     }

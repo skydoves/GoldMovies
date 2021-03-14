@@ -16,9 +16,9 @@
 
 package com.skydoves.mvvm_coroutines.ui.details.movie
 
+import androidx.databinding.Bindable
 import androidx.databinding.ObservableBoolean
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.switchMap
 import com.skydoves.entity.Keyword
@@ -38,39 +38,40 @@ class MovieDetailViewModel constructor(
   val keywordListLiveData: LiveData<List<Keyword>?>
   val videoListLiveData: LiveData<List<Video>?>
   val reviewListLiveData: LiveData<List<Review>?>
-  val toastLiveData: MutableLiveData<String> = MutableLiveData()
 
   private lateinit var movie: Movie
   val favourite = ObservableBoolean()
 
-  val isLoading: ObservableBoolean = ObservableBoolean(false)
+  @get:Bindable
+  var isLoading: Boolean = false
+    private set
 
   init {
     Timber.d("Injection MovieDetailViewModel")
 
     this.keywordListLiveData = movieIdStateFlow.asLiveData().switchMap { id ->
       launchOnViewModelScope {
-        isLoading.set(true)
+        isLoading = true
         movieRepository.loadKeywordList(id) {
-          isLoading.set(false)
+          isLoading = false
         }.asLiveData()
       }
     }
 
     this.videoListLiveData = movieIdStateFlow.asLiveData().switchMap { id ->
       launchOnViewModelScope {
-        isLoading.set(true)
+        isLoading = true
         movieRepository.loadVideoList(id) {
-          isLoading.set(false)
+          isLoading = false
         }.asLiveData()
       }
     }
 
     this.reviewListLiveData = movieIdStateFlow.asLiveData().switchMap { id ->
       launchOnViewModelScope {
-        isLoading.set(true)
+        isLoading = true
         movieRepository.loadReviewsList(id) {
-          isLoading.set(false)
+          isLoading = false
         }.asLiveData()
       }
     }

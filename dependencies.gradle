@@ -20,7 +20,10 @@ ext.versions = [
     fragmentKtxVersion       : '1.2.5',
     archCompomentVersion     : '2.1.0',
     lifecycleVersion         : '2.2.0',
-    roomVersion              : '2.3.0-alpha04',
+    roomVersion              : '2.3.0-beta03',
+
+    // data binding
+    bindablesVersion         : '1.0.7',
 
     // di
     daggerVersion            : '2.30.1',

@@ -16,9 +16,8 @@
 
 package com.skydoves.mvvm_coroutines.ui.details.person
 
-import androidx.databinding.ObservableBoolean
+import androidx.databinding.Bindable
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.switchMap
 import com.skydoves.entity.entities.Person
@@ -35,20 +34,21 @@ class PersonDetailViewModel constructor(
 
   private val personIdMutableState: MutableStateFlow<Int> = MutableStateFlow(0)
   val personLiveData: LiveData<PersonDetail?>
-  val toastLiveData: MutableLiveData<String> = MutableLiveData()
 
   private lateinit var person: Person
 
-  val isLoading: ObservableBoolean = ObservableBoolean(false)
+  @get:Bindable
+  var isLoading: Boolean = false
+    private set
 
   init {
     Timber.d("Injection : PersonDetailViewModel")
 
     this.personLiveData = personIdMutableState.asLiveData().switchMap { id ->
       launchOnViewModelScope {
-        isLoading.set(true)
+        isLoading = true
         peopleRepository.loadPersonDetail(id) {
-          isLoading.set(false)
+          isLoading = false
         }.asLiveData()
       }
     }

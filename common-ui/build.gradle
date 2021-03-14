@@ -32,6 +32,11 @@ dependencies {
     // adapter
     api "com.github.skydoves:baserecyclerviewadapter:$versions.baseAdapter"
 
+    // data binding
+    api ("com.github.skydoves:bindables:$versions.bindablesVersion") {
+        exclude group: "com.google.android.material"
+    }
+
     // whatIf
     implementation "com.github.skydoves:whatif:$versions.whatIfVersion"
 
