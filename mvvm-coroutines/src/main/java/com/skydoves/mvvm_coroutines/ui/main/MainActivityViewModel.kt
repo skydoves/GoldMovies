@@ -37,13 +37,13 @@ class MainActivityViewModel constructor(
   private val peopleRepository: PeopleRepository
 ) : LiveCoroutinesViewModel() {
 
-  private var moviePageStateFlow: MutableStateFlow<Int> = MutableStateFlow(0)
+  private var moviePageStateFlow: MutableStateFlow<Int> = MutableStateFlow(1)
   val movieListLiveData: LiveData<List<Movie>?>
 
-  private var tvPageStateFlow: MutableStateFlow<Int> = MutableStateFlow(0)
+  private var tvPageStateFlow: MutableStateFlow<Int> = MutableStateFlow(1)
   val tvListLiveData: LiveData<List<Tv>?>
 
-  private var peoplePageStateFlow: MutableStateFlow<Int> = MutableStateFlow(0)
+  private var peoplePageStateFlow: MutableStateFlow<Int> = MutableStateFlow(1)
   val peopleLiveData: LiveData<List<Person>>
 
   val isLoading: ObservableBoolean = ObservableBoolean(false)
