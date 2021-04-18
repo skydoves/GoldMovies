@@ -20,11 +20,8 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.lifecycle.observe
 import com.skydoves.baserecyclerviewadapter.RecyclerViewPaginator
 import com.skydoves.common_ui.adapters.MovieListAdapter
-import com.skydoves.common_ui.extensions.toast
-import com.skydoves.common_ui.viewholders.MovieListViewHolderss
 import com.skydoves.entity.entities.Movie
 import com.skydoves.mvvm.R
 import com.skydoves.mvvm.base.ViewModelFragment
@@ -32,7 +29,8 @@ import com.skydoves.mvvm.databinding.FragmentMovieBinding
 import com.skydoves.mvvm.ui.details.movie.MovieDetailActivity
 import kotlinx.android.synthetic.main.fragment_movie.recyclerView
 
-class MovieListFragment : ViewModelFragment(), MovieListViewHolderss.Delegate {
+class MovieListFragment :
+  ViewModelFragment<FragmentMovieBinding>(R.layout.fragment_movie), MovieListAdapter.Delegate {
 
   private val viewModel: MainActivityViewModel by injectActivityVIewModels()
 
@@ -40,23 +38,21 @@ class MovieListFragment : ViewModelFragment(), MovieListViewHolderss.Delegate {
     inflater: LayoutInflater,
     container: ViewGroup?,
     savedInstanceState: Bundle?
-  ): View? {
-    return binding<FragmentMovieBinding>(
-      inflater, R.layout.fragment_movie, container).apply {
+  ): View {
+    super.onCreateView(inflater, container, savedInstanceState)
+    return binding {
       viewModel = this@MovieListFragment.viewModel
       lifecycleOwner = this@MovieListFragment
+      adapter = MovieListAdapter(this@MovieListFragment)
     }.root
   }
 
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
     initializeUI()
-    loadMore(page = 1)
-    observeMessages()
   }
 
   private fun initializeUI() {
-    recyclerView.adapter = MovieListAdapter(this)
     RecyclerViewPaginator(
       recyclerView = recyclerView,
       isLoading = { viewModel.isLoading() },
@@ -72,7 +68,4 @@ class MovieListFragment : ViewModelFragment(), MovieListViewHolderss.Delegate {
 
   override fun onItemClick(view: View, movie: Movie) =
     MovieDetailActivity.startActivityModel(requireContext(), view, movie)
-
-  private fun observeMessages() =
-    this.viewModel.toastLiveData.observe(this) { context?.toast(it) }
 }

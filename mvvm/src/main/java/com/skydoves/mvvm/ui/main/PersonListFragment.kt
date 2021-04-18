@@ -20,10 +20,8 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.lifecycle.observe
 import com.skydoves.baserecyclerviewadapter.RecyclerViewPaginator
 import com.skydoves.common_ui.adapters.PeopleAdapter
-import com.skydoves.common_ui.extensions.toast
 import com.skydoves.common_ui.viewholders.PeopleViewHolder
 import com.skydoves.entity.entities.Person
 import com.skydoves.mvvm.R
@@ -32,7 +30,8 @@ import com.skydoves.mvvm.databinding.FragmentPeopleBinding
 import com.skydoves.mvvm.ui.details.person.PersonDetailActivity
 import kotlinx.android.synthetic.main.fragment_people.recyclerView
 
-class PersonListFragment : ViewModelFragment(), PeopleViewHolder.Delegate {
+class PersonListFragment :
+  ViewModelFragment<FragmentPeopleBinding>(R.layout.fragment_people), PeopleViewHolder.Delegate {
 
   private val viewModel: MainActivityViewModel by injectActivityVIewModels()
 
@@ -40,23 +39,21 @@ class PersonListFragment : ViewModelFragment(), PeopleViewHolder.Delegate {
     inflater: LayoutInflater,
     container: ViewGroup?,
     savedInstanceState: Bundle?
-  ): View? {
-    return binding<FragmentPeopleBinding>(
-      inflater, R.layout.fragment_people, container).apply {
+  ): View {
+    super.onCreateView(inflater, container, savedInstanceState)
+    return binding {
       viewModel = this@PersonListFragment.viewModel
       lifecycleOwner = this@PersonListFragment
+      adapter = PeopleAdapter(this@PersonListFragment)
     }.root
   }
 
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
     initializeUI()
-    loadMore(page = 1)
-    observeMessages()
   }
 
   private fun initializeUI() {
-    recyclerView.adapter = PeopleAdapter(this)
     RecyclerViewPaginator(
       recyclerView = recyclerView,
       isLoading = { viewModel.isLoading() },
@@ -72,7 +69,4 @@ class PersonListFragment : ViewModelFragment(), PeopleViewHolder.Delegate {
 
   override fun onItemClick(person: Person, view: View) =
     PersonDetailActivity.startActivity(activity, person.id, view)
-
-  private fun observeMessages() =
-    this.viewModel.toastLiveData.observe(this) { context?.toast(it) }
 }
