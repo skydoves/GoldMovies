@@ -18,14 +18,11 @@ package com.skydoves.mvvm_coroutines.di
 
 import com.skydoves.network.EndPoint
 import com.skydoves.network.RequestInterceptor
-import com.skydoves.network.client.MovieClient
-import com.skydoves.network.client.PeopleClient
-import com.skydoves.network.client.TheDiscoverClient
-import com.skydoves.network.client.TvClient
 import com.skydoves.network.service.MovieService
 import com.skydoves.network.service.PeopleService
 import com.skydoves.network.service.TheDiscoverService
 import com.skydoves.network.service.TvService
+import com.skydoves.sandwich.coroutines.CoroutinesResponseCallAdapterFactory
 import okhttp3.OkHttpClient
 import org.koin.dsl.module
 import retrofit2.Retrofit
@@ -43,22 +40,15 @@ val networkModule = module {
       .client(get<OkHttpClient>())
       .baseUrl(EndPoint.TheMovieDB)
       .addConverterFactory(GsonConverterFactory.create())
+      .addCallAdapterFactory(CoroutinesResponseCallAdapterFactory())
       .build()
   }
 
   single { get<Retrofit>().create(TheDiscoverService::class.java) }
 
-  single { TheDiscoverClient(get()) }
-
   single { get<Retrofit>().create(PeopleService::class.java) }
-
-  single { PeopleClient(get()) }
 
   single { get<Retrofit>().create(MovieService::class.java) }
 
-  single { MovieClient(get()) }
-
   single { get<Retrofit>().create(TvService::class.java) }
-
-  single { TvClient(get()) }
 }

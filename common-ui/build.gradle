@@ -21,9 +21,6 @@ dependencies {
     // module dependencies
     implementation project(":entity")
 
-    // kotlin
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$versions.kotlin"
-
     // google material
     api "com.google.android.material:material:$versions.materialVersion"
 
@@ -35,8 +32,16 @@ dependencies {
     // adapter
     api "com.github.skydoves:baserecyclerviewadapter:$versions.baseAdapter"
 
+    // data binding
+    api ("com.github.skydoves:bindables:$versions.bindablesVersion") {
+        exclude group: "com.google.android.material"
+    }
+
     // whatIf
     implementation "com.github.skydoves:whatif:$versions.whatIfVersion"
+
+    // bundler
+    api "com.github.skydoves:bundler:$versions.bundlerVersion"
 
     // custom views
     api "com.github.skydoves:flourish:$versions.flourishVersion"

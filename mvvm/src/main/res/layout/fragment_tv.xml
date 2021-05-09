@@ -6,6 +6,10 @@
   <data>
 
     <variable
+      name="adapter"
+      type="com.skydoves.common_ui.adapters.TvListAdapter" />
+
+    <variable
       name="viewModel"
       type="com.skydoves.mvvm.ui.main.MainActivityViewModel" />
   </data>
@@ -19,6 +23,7 @@
       android:layout_width="match_parent"
       android:layout_height="match_parent"
       android:clipToPadding="false"
+      app:adapter="@{adapter}"
       app:adapterTvList="@{viewModel.tvListLiveData}"
       app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
       app:spanCount="2"

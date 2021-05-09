@@ -37,9 +37,6 @@ android {
 }
 
 dependencies {
-    // kotlin
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$versions.kotlin"
-
     // database
     implementation "androidx.room:room-runtime:$versions.roomVersion"
     kapt "androidx.room:room-compiler:$versions.roomVersion"

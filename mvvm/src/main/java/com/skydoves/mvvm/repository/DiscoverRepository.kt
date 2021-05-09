@@ -16,80 +16,63 @@
 
 package com.skydoves.mvvm.repository
 
-import androidx.lifecycle.MutableLiveData
 import com.skydoves.entity.database.MovieDao
 import com.skydoves.entity.database.TvDao
-import com.skydoves.entity.entities.Movie
-import com.skydoves.entity.entities.Tv
-import com.skydoves.network.ApiResponse
-import com.skydoves.network.client.TheDiscoverClient
-import com.skydoves.network.message
+import com.skydoves.network.service.TheDiscoverService
+import com.skydoves.sandwich.suspendOnSuccess
+import com.skydoves.whatif.whatIfNotNull
 import javax.inject.Inject
 import javax.inject.Singleton
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.flow.onCompletion
 import timber.log.Timber
 
 @Singleton
 class DiscoverRepository @Inject constructor(
-  private val discoverClient: TheDiscoverClient,
+  private val discoverService: TheDiscoverService,
   private val movieDao: MovieDao,
   private val tvDao: TvDao
 ) : Repository {
-
-  override var isLoading: Boolean = false
 
   init {
     Timber.d("Injection DiscoverRepository")
   }
 
-  fun loadMovies(page: Int, error: (String) -> Unit): MutableLiveData<List<Movie>> {
-    val liveData = MutableLiveData<List<Movie>>()
+  fun loadMovies(page: Int, onSuccess: () -> Unit) = flow {
     var movies = movieDao.getMovieList(page)
     if (movies.isEmpty()) {
-      this.isLoading = true
-      discoverClient.fetchDiscoverMovie(page) { response ->
-        this.isLoading = false
-        when (response) {
-          is ApiResponse.Success -> {
-            response.data?.let { data ->
-              movies = data.results
-              movies.forEach { it.page = page }
-              liveData.postValue(movies)
-              movieDao.insertMovieList(movies)
-            }
-          }
-          is ApiResponse.Failure.Error -> error(response.message())
-          is ApiResponse.Failure.Exception -> error(response.message())
+      val response = discoverService.fetchDiscoverMovie(page)
+      response.suspendOnSuccess {
+        data.whatIfNotNull {
+          movies = it.results
+          movies.forEach { it.page = page }
+          movieDao.insertMovieList(movies)
+          emit(movies)
         }
       }
+    } else {
+      emit(movies)
     }
-    liveData.postValue(movies)
-    return liveData
-  }
+  }.onCompletion { onSuccess() }.flowOn(Dispatchers.IO)
 
-  fun loadTvs(page: Int, error: (String) -> Unit): MutableLiveData<List<Tv>> {
-    val liveData = MutableLiveData<List<Tv>>()
+  fun loadTvs(page: Int, onSuccess: () -> Unit) = flow {
     var tvs = tvDao.getTvList(page)
     if (tvs.isEmpty()) {
-      this.isLoading = true
-      discoverClient.fetchDiscoverTv(page) { response ->
-        this.isLoading = false
-        when (response) {
-          is ApiResponse.Success -> {
-            response.data?.let { data ->
-              tvs = data.results
-              tvs.forEach { it.page = page }
-              liveData.postValue(tvs)
-              tvDao.insertTv(tvs)
-            }
-          }
-          is ApiResponse.Failure.Error -> error(response.message())
-          is ApiResponse.Failure.Exception -> error(response.message())
+      val response = discoverService.fetchDiscoverTv(page)
+      response.suspendOnSuccess {
+        data.whatIfNotNull {
+          tvs = it.results
+          tvs.forEach { it.page = page }
+          tvDao.insertTv(tvs)
+          emit(tvs)
         }
       }
+    } else {
+      emit(tvs)
     }
-    liveData.postValue(tvs)
-    return liveData
-  }
+  }.onCompletion { onSuccess() }.flowOn(Dispatchers.IO)
 
   fun getFavouriteMovieList() = movieDao.getFavouriteMovieList()
 

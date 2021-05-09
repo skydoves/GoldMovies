@@ -14,14 +14,13 @@
  * limitations under the License.
  */
 
-package com.skydoves.common_ui.viewholders
+package com.skydoves.network.extensions
 
-import android.view.View
-import androidx.databinding.DataBindingUtil
-import androidx.databinding.ViewDataBinding
+import kotlinx.coroutines.flow.MutableStateFlow
 
-inline fun <reified T : ViewDataBinding> bindings(view: View): Lazy<T> =
-  lazy {
-    DataBindingUtil.bind<T>(view)
-      ?: throw IllegalAccessException("cannot find the matched view to layout.")
-  }
+/**
+ * set value into the mutable state flow on the main thread.
+ */
+inline fun <reified T> MutableStateFlow<T>.setValue(value: T) {
+  this.value = value
+}

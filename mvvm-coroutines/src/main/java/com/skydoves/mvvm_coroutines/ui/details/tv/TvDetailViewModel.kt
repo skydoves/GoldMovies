@@ -16,9 +16,11 @@
 
 package com.skydoves.mvvm_coroutines.ui.details.tv
 
+import androidx.annotation.MainThread
+import androidx.databinding.Bindable
 import androidx.databinding.ObservableBoolean
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.asLiveData
 import androidx.lifecycle.switchMap
 import com.skydoves.entity.Keyword
 import com.skydoves.entity.Review
@@ -26,43 +28,61 @@ import com.skydoves.entity.Video
 import com.skydoves.entity.entities.Tv
 import com.skydoves.mvvm_coroutines.base.LiveCoroutinesViewModel
 import com.skydoves.mvvm_coroutines.repository.TvRepository
+import com.skydoves.network.extensions.setValue
+import kotlinx.coroutines.flow.MutableStateFlow
 import timber.log.Timber
 
 class TvDetailViewModel constructor(
   private val tvRepository: TvRepository
 ) : LiveCoroutinesViewModel() {
 
-  private val tvIdLiveData: MutableLiveData<Int> = MutableLiveData()
-  val keywordListLiveData: LiveData<List<Keyword>>
-  val videoListLiveData: LiveData<List<Video>>
-  val reviewListLiveData: LiveData<List<Review>>
-  val toastLiveData: MutableLiveData<String> = MutableLiveData()
+  private val tvIdStateFlow: MutableStateFlow<Int> = MutableStateFlow(0)
+
+  val keywordListLiveData: LiveData<List<Keyword>?>
+  val videoListLiveData: LiveData<List<Video>?>
+  val reviewListLiveData: LiveData<List<Review>?>
 
   private lateinit var tv: Tv
   val favourite = ObservableBoolean()
 
+  @get:Bindable
+  var isLoading: Boolean = false
+    private set
+
   init {
     Timber.d("Injection TvDetailViewModel")
 
-    this.keywordListLiveData = tvIdLiveData.switchMap { id ->
+    this.keywordListLiveData = tvIdStateFlow.asLiveData().switchMap { id ->
       launchOnViewModelScope {
-        tvRepository.loadKeywordList(id) { toastLiveData.postValue(it) }
+        isLoading = true
+        tvRepository.loadKeywordList(id) {
+          isLoading = false
+        }.asLiveData()
       }
     }
 
-    this.videoListLiveData = tvIdLiveData.switchMap { id ->
+    this.videoListLiveData = tvIdStateFlow.asLiveData().switchMap { id ->
       launchOnViewModelScope {
-        tvRepository.loadVideoList(id) { toastLiveData.postValue(it) }
+        isLoading = true
+        tvRepository.loadVideoList(id) {
+          isLoading = false
+        }.asLiveData()
       }
     }
 
-    this.reviewListLiveData = tvIdLiveData.switchMap { id ->
-      launchOnViewModelScope { tvRepository.loadReviewsList(id) { toastLiveData.postValue(it) } }
+    this.reviewListLiveData = tvIdStateFlow.asLiveData().switchMap { id ->
+      launchOnViewModelScope {
+        isLoading = true
+        tvRepository.loadReviewsList(id) {
+          isLoading = false
+        }.asLiveData()
+      }
     }
   }
 
+  @MainThread
   fun postTvId(id: Int) {
-    this.tvIdLiveData.postValue(id)
+    this.tvIdStateFlow.setValue(id)
     this.tv = tvRepository.getTv(id)
     this.favourite.set(this.tv.favourite)
   }

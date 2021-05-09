@@ -49,13 +49,20 @@ dependencies {
     // module dependencies
     implementation project(":entity")
 
-    // kotlin
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$versions.kotlin"
-
     // network
-    api "com.squareup.retrofit2:retrofit:$versions.retrofitVersion"
+    api "com.github.skydoves:sandwich:$versions.sandwichVersion"
     api "com.squareup.okhttp3:logging-interceptor:$versions.okhttpVersion"
+    api "com.squareup.retrofit2:converter-gson:$versions.retrofitVersion"
     testImplementation "com.squareup.okhttp3:mockwebserver:$versions.okhttpVersion"
+
+    // coroutines
+    api "org.jetbrains.kotlinx:kotlinx-coroutines-android:$versions.coroutinesVersion"
+
+    // whatIf
+    api "com.github.skydoves:whatif:$versions.whatIfVersion"
+
+    // debugging
+    implementation "com.jakewharton.timber:timber:$versions.timberVersion"
 
     // unit test
     testImplementation "junit:junit:$versions.junitVersion"

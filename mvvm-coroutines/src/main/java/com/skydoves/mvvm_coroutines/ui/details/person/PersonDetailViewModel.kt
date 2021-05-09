@@ -16,37 +16,46 @@
 
 package com.skydoves.mvvm_coroutines.ui.details.person
 
+import androidx.databinding.Bindable
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.asLiveData
 import androidx.lifecycle.switchMap
 import com.skydoves.entity.entities.Person
 import com.skydoves.entity.response.PersonDetail
 import com.skydoves.mvvm_coroutines.base.LiveCoroutinesViewModel
 import com.skydoves.mvvm_coroutines.repository.PeopleRepository
+import com.skydoves.network.extensions.setValue
+import kotlinx.coroutines.flow.MutableStateFlow
 import timber.log.Timber
 
 class PersonDetailViewModel constructor(
   private val peopleRepository: PeopleRepository
 ) : LiveCoroutinesViewModel() {
 
-  private val personIdLiveData: MutableLiveData<Int> = MutableLiveData()
-  val personLiveData: LiveData<PersonDetail>
-  val toastLiveData: MutableLiveData<String> = MutableLiveData()
+  private val personIdMutableState: MutableStateFlow<Int> = MutableStateFlow(0)
+  val personLiveData: LiveData<PersonDetail?>
 
   private lateinit var person: Person
+
+  @get:Bindable
+  var isLoading: Boolean = false
+    private set
 
   init {
     Timber.d("Injection : PersonDetailViewModel")
 
-    this.personLiveData = personIdLiveData.switchMap { id ->
+    this.personLiveData = personIdMutableState.asLiveData().switchMap { id ->
       launchOnViewModelScope {
-        peopleRepository.loadPersonDetail(id) { toastLiveData.postValue(it) }
+        isLoading = true
+        peopleRepository.loadPersonDetail(id) {
+          isLoading = false
+        }.asLiveData()
       }
     }
   }
 
   fun postPersonId(id: Int) {
-    this.personIdLiveData.postValue(id)
+    this.personIdMutableState.setValue(id)
     this.person = peopleRepository.getPerson(id)
   }
 

@@ -20,10 +20,8 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.lifecycle.observe
 import com.skydoves.baserecyclerviewadapter.RecyclerViewPaginator
 import com.skydoves.common_ui.adapters.TvListAdapter
-import com.skydoves.common_ui.extensions.toast
 import com.skydoves.common_ui.viewholders.TvListViewHolder
 import com.skydoves.entity.entities.Tv
 import com.skydoves.mvvm.R
@@ -32,7 +30,8 @@ import com.skydoves.mvvm.databinding.FragmentTvBinding
 import com.skydoves.mvvm.ui.details.tv.TvDetailActivity
 import kotlinx.android.synthetic.main.fragment_tv.recyclerView
 
-class TvListFragment : ViewModelFragment(), TvListViewHolder.Delegate {
+class TvListFragment :
+  ViewModelFragment<FragmentTvBinding>(R.layout.fragment_tv), TvListViewHolder.Delegate {
 
   private val viewModel: MainActivityViewModel by injectActivityVIewModels()
 
@@ -40,25 +39,24 @@ class TvListFragment : ViewModelFragment(), TvListViewHolder.Delegate {
     inflater: LayoutInflater,
     container: ViewGroup?,
     savedInstanceState: Bundle?
-  ): View? {
-    return binding<FragmentTvBinding>(inflater, R.layout.fragment_tv, container).apply {
+  ): View {
+    super.onCreateView(inflater, container, savedInstanceState)
+    return binding {
       viewModel = this@TvListFragment.viewModel
       lifecycleOwner = this@TvListFragment
+      adapter = TvListAdapter(this@TvListFragment)
     }.root
   }
 
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
     initializeUI()
-    loadMore(page = 1)
-    observeMessages()
   }
 
   private fun initializeUI() {
-    recyclerView.adapter = TvListAdapter(this)
     RecyclerViewPaginator(
       recyclerView = recyclerView,
-      isLoading = { viewModel.isLoading() },
+      isLoading = { viewModel.isLoading },
       loadMore = { loadMore(it) },
       onLast = { false }
     ).apply {
@@ -71,7 +69,4 @@ class TvListFragment : ViewModelFragment(), TvListViewHolder.Delegate {
 
   override fun onItemClick(tv: Tv) =
     TvDetailActivity.startActivityModel(requireContext(), tv.id)
-
-  private fun observeMessages() =
-    this.viewModel.toastLiveData.observe(this) { context?.toast(it) }
 }

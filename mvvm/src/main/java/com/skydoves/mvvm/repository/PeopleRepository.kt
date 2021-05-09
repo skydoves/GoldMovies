@@ -16,79 +16,62 @@
 
 package com.skydoves.mvvm.repository
 
-import androidx.lifecycle.MutableLiveData
 import com.skydoves.entity.database.PeopleDao
-import com.skydoves.entity.entities.Person
-import com.skydoves.entity.response.PersonDetail
-import com.skydoves.network.ApiResponse
-import com.skydoves.network.client.PeopleClient
-import com.skydoves.network.message
+import com.skydoves.network.service.PeopleService
+import com.skydoves.sandwich.suspendOnSuccess
+import com.skydoves.whatif.whatIfNotNull
 import javax.inject.Inject
 import javax.inject.Singleton
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.flow.onCompletion
 import timber.log.Timber
 
 @Singleton
 class PeopleRepository @Inject constructor(
-  private val peopleClient: PeopleClient,
+  private val peopleService: PeopleService,
   private val peopleDao: PeopleDao
 ) : Repository {
-
-  override var isLoading: Boolean = false
 
   init {
     Timber.d("Injection PeopleRepository")
   }
 
-  fun loadPeople(page: Int, error: (String) -> Unit): MutableLiveData<List<Person>> {
-    val liveData = MutableLiveData<List<Person>>()
+  fun loadPeople(page: Int, onSuccess: () -> Unit) = flow {
     var people = peopleDao.getPeople(page)
     if (people.isEmpty()) {
-      this.isLoading = true
-      peopleClient.fetchPopularPeople(page) { response ->
-        this.isLoading = false
-        when (response) {
-          is ApiResponse.Success -> {
-            response.data?.let { data ->
-              people = data.results
-              people.forEach { it.page = page }
-              liveData.postValue(people)
-              peopleDao.insertPeople(people)
-            }
-          }
-          is ApiResponse.Failure.Error -> error(response.message())
-          is ApiResponse.Failure.Exception -> error(response.message())
+      val response = peopleService.fetchPopularPeople(page)
+      response.suspendOnSuccess {
+        data.whatIfNotNull {
+          people = it.results
+          people.forEach { it.page = page }
+          peopleDao.insertPeople(people)
+          emit(people)
         }
       }
+    } else {
+      emit(people)
     }
-    liveData.postValue(people)
-    return liveData
-  }
+  }.onCompletion { onSuccess() }.flowOn(Dispatchers.IO)
 
-  fun loadPersonDetail(id: Int, error: (String) -> Unit): MutableLiveData<PersonDetail> {
-    val liveData = MutableLiveData<PersonDetail>()
+  fun loadPersonDetail(id: Int, onSuccess: () -> Unit) = flow {
     val person = peopleDao.getPerson(id)
     var personDetail = person.personDetail
     if (personDetail == null) {
-      this.isLoading = true
-      peopleClient.fetchPersonDetail(id) { response ->
-        this.isLoading = false
-        when (response) {
-          is ApiResponse.Success -> {
-            response.data?.let { data ->
-              personDetail = data
-              person.personDetail = personDetail
-              liveData.postValue(personDetail)
-              peopleDao.updatePerson(person)
-            }
-          }
-          is ApiResponse.Failure.Error -> error(response.message())
-          is ApiResponse.Failure.Exception -> error(response.message())
+      val response = peopleService.fetchPersonDetail(id)
+      response.suspendOnSuccess {
+        data.whatIfNotNull {
+          personDetail = it
+          person.personDetail = personDetail
+          peopleDao.updatePerson(person)
+          emit(personDetail)
         }
       }
+    } else {
+      emit(personDetail)
     }
-    liveData.postValue(person.personDetail)
-    return liveData
-  }
+  }.onCompletion { onSuccess() }.flowOn(Dispatchers.IO)
 
   fun getPerson(id: Int) = peopleDao.getPerson(id)
 }

@@ -14,14 +14,15 @@
  * limitations under the License.
  */
 
-package com.skydoves.common_ui.viewholders
+package com.skydoves.network.model
 
-import android.view.View
-import androidx.databinding.DataBindingUtil
-import androidx.databinding.ViewDataBinding
-
-inline fun <reified T : ViewDataBinding> bindings(view: View): Lazy<T> =
-  lazy {
-    DataBindingUtil.bind<T>(view)
-      ?: throw IllegalAccessException("cannot find the matched view to layout.")
-  }
+/**
+ * The movie error response is a customized error response model.
+ *
+ * @param code The error response code.
+ * @param message The error response body message.
+ */
+data class TheMovieErrorResponse(
+  val code: Int,
+  val message: String
+)

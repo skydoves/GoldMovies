@@ -16,10 +16,13 @@
 
 package com.skydoves.mvvm.ui.main
 
+import androidx.databinding.Bindable
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
+import androidx.lifecycle.asLiveData
 import androidx.lifecycle.switchMap
+import com.skydoves.bindables.BindingViewModel
+import com.skydoves.bindables.bindingProperty
 import com.skydoves.entity.entities.Movie
 import com.skydoves.entity.entities.Person
 import com.skydoves.entity.entities.Tv
@@ -31,32 +34,47 @@ import timber.log.Timber
 class MainActivityViewModel @Inject constructor(
   private val discoverRepository: DiscoverRepository,
   private val peopleRepository: PeopleRepository
-) : ViewModel() {
+) : BindingViewModel() {
 
   private var moviePageLiveData: MutableLiveData<Int> = MutableLiveData()
   val movieListLiveData: LiveData<List<Movie>>
 
-  private var tvPageLiveData: MutableLiveData<Int> = MutableLiveData()
+  private var tvPageLiveData: MutableLiveData<Int> = MutableLiveData(1)
   val tvListLiveData: LiveData<List<Tv>>
 
-  private var peoplePageLiveData: MutableLiveData<Int> = MutableLiveData()
+  private var peoplePageLiveData: MutableLiveData<Int> = MutableLiveData(1)
   val peopleLiveData: LiveData<List<Person>>
 
-  val toastLiveData: MutableLiveData<String> = MutableLiveData()
+  @get:Bindable
+  var toastLiveData: String? by bindingProperty(null)
+    private set
+
+  @get:Bindable
+  var isLoading: Boolean by bindingProperty(false)
+    private set
 
   init {
     Timber.d("injection MainActivityViewModel")
 
     this.movieListLiveData = moviePageLiveData.switchMap { page ->
-      discoverRepository.loadMovies(page) { toastLiveData.postValue(it) }
+      isLoading = true
+      discoverRepository.loadMovies(page) {
+        isLoading = false
+      }.asLiveData()
     }
 
     this.tvListLiveData = tvPageLiveData.switchMap { page ->
-      discoverRepository.loadTvs(page) { toastLiveData.postValue(it) }
+      isLoading = true
+      discoverRepository.loadTvs(page) {
+        isLoading = false
+      }.asLiveData()
     }
 
     this.peopleLiveData = peoplePageLiveData.switchMap { page ->
-      peopleRepository.loadPeople(page) { toastLiveData.postValue(it) }
+      isLoading = true
+      peopleRepository.loadPeople(page) {
+        isLoading = false
+      }.asLiveData()
     }
   }
 
@@ -69,6 +87,4 @@ class MainActivityViewModel @Inject constructor(
   fun getFavouriteMovieList() = discoverRepository.getFavouriteMovieList()
 
   fun getFavouriteTvList() = discoverRepository.getFavouriteTvList()
-
-  fun isLoading() = discoverRepository.isLoading || peopleRepository.isLoading
 }

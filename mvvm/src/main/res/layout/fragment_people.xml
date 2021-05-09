@@ -6,6 +6,10 @@
   <data>
 
     <variable
+      name="adapter"
+      type="com.skydoves.common_ui.adapters.PeopleAdapter" />
+
+    <variable
       name="viewModel"
       type="com.skydoves.mvvm.ui.main.MainActivityViewModel" />
   </data>
@@ -17,8 +21,9 @@
     <androidx.recyclerview.widget.RecyclerView
       android:id="@+id/recyclerView"
       android:layout_width="match_parent"
-      android:layout_height="match_parent"
+      android:layout_height="[match_parent"
       android:clipToPadding="false"
+      app:adapter="@{adapter}"
       app:adapterPersonList="@{viewModel.peopleLiveData}"
       app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
       app:spanCount="2"

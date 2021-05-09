@@ -17,57 +17,46 @@
 package com.skydoves.mvvm_coroutines.ui.details.person
 
 import android.app.Activity
-import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import androidx.core.app.ActivityOptionsCompat
 import androidx.core.view.ViewCompat
-import androidx.lifecycle.observe
-import com.skydoves.common_ui.extensions.checkIsMaterialVersion
-import com.skydoves.common_ui.extensions.toast
+import com.skydoves.bindables.BindingActivity
+import com.skydoves.bundler.intentOf
 import com.skydoves.mvvm_coroutines.R
-import com.skydoves.mvvm_coroutines.base.DatabindingActivity
 import com.skydoves.mvvm_coroutines.databinding.ActivityPersonDetailBinding
 import org.koin.android.viewmodel.ext.android.viewModel
 
-class PersonDetailActivity : DatabindingActivity() {
+class PersonDetailActivity : BindingActivity<ActivityPersonDetailBinding>(
+  R.layout.activity_person_detail) {
 
   private val viewModel: PersonDetailViewModel by viewModel()
-  private val binding: ActivityPersonDetailBinding by binding(R.layout.activity_person_detail)
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     // post the person id from intent
-    viewModel.postPersonId(intent.getIntExtra(person, 0))
+    viewModel.postPersonId(intent.getIntExtra(EXTRA_PERSON_ID, 0))
     // binding data into layout view
-    with(binding) {
+    binding {
       lifecycleOwner = this@PersonDetailActivity
       activity = this@PersonDetailActivity
       viewModel = this@PersonDetailActivity.viewModel
       person = this@PersonDetailActivity.viewModel.getPerson()
     }
-    // observe error messages
-    observeMessages()
   }
 
-  private fun observeMessages() =
-    this.viewModel.toastLiveData.observe(this) { toast(it) }
-
   companion object {
-    const val person = "person"
+    const val EXTRA_PERSON_ID = "person"
     private const val intent_requestCode = 1000
 
     fun startActivity(activity: Activity?, personId: Int, view: View) {
-      if (activity != null) {
-        val intent = Intent(activity, PersonDetailActivity::class.java)
-        intent.putExtra(person, personId)
-        if (checkIsMaterialVersion()) {
+      if (activity is Activity) {
+        activity.intentOf<PersonDetailActivity> {
+          putExtra(EXTRA_PERSON_ID to personId)
           ViewCompat.getTransitionName(view)?.let {
             val options = ActivityOptionsCompat.makeSceneTransitionAnimation(activity, view, it)
             activity.startActivityForResult(intent, intent_requestCode, options.toBundle())
           }
-        } else {
-          activity.startActivity(intent)
         }
       }
     }

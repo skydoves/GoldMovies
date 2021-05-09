@@ -16,10 +16,13 @@
 
 package com.skydoves.mvvm.ui.details.person
 
+import androidx.databinding.Bindable
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
+import androidx.lifecycle.asLiveData
 import androidx.lifecycle.switchMap
+import com.skydoves.bindables.BindingViewModel
+import com.skydoves.bindables.bindingProperty
 import com.skydoves.entity.entities.Person
 import com.skydoves.entity.response.PersonDetail
 import com.skydoves.mvvm.repository.PeopleRepository
@@ -28,19 +31,26 @@ import timber.log.Timber
 
 class PersonDetailViewModel @Inject constructor(
   private val peopleRepository: PeopleRepository
-) : ViewModel() {
+) : BindingViewModel() {
 
   private val personIdLiveData: MutableLiveData<Int> = MutableLiveData()
-  val personLiveData: LiveData<PersonDetail>
+  val personLiveData: LiveData<PersonDetail?>
   val toastLiveData: MutableLiveData<String> = MutableLiveData()
 
   private lateinit var person: Person
+
+  @get:Bindable
+  var isLoading: Boolean by bindingProperty(false)
+    private set
 
   init {
     Timber.d("Injection : PersonDetailViewModel")
 
     this.personLiveData = personIdLiveData.switchMap { id ->
-      peopleRepository.loadPersonDetail(id) { toastLiveData.postValue(it) }
+      isLoading = true
+      peopleRepository.loadPersonDetail(id) {
+        isLoading = false
+      }.asLiveData()
     }
   }
 

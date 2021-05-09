@@ -22,6 +22,8 @@ import com.skydoves.mvvm_coroutines.di.networkModule
 import com.skydoves.mvvm_coroutines.di.persistenceModule
 import com.skydoves.mvvm_coroutines.di.repositoryModule
 import com.skydoves.mvvm_coroutines.di.viewModelModule
+import com.skydoves.network.operator.GlobalResponseOperator
+import com.skydoves.sandwich.SandwichInitializer
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.startKoin
 import timber.log.Timber
@@ -40,6 +42,9 @@ class App : Application() {
       modules(repositoryModule)
       modules(viewModelModule)
     }
+
+    // initialize global sandwich
+    SandwichInitializer.sandwichOperator = GlobalResponseOperator<Any>(this)
 
     if (BuildConfig.DEBUG) {
       Timber.plant(Timber.DebugTree())

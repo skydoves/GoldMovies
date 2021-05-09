@@ -22,11 +22,11 @@ import android.view.ViewGroup
 import androidx.annotation.LayoutRes
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import com.skydoves.bindables.BindingFragment
 import dagger.android.support.AndroidSupportInjection
 import javax.inject.Inject
 
@@ -36,7 +36,9 @@ import javax.inject.Inject
  * Do not modify this class. This is a first-level abstraction class.
  * If you want to add more specifications, make another class which extends [ViewModelFragment].
  */
-abstract class ViewModelFragment : Fragment() {
+abstract class ViewModelFragment<T : ViewDataBinding> constructor(
+  @LayoutRes resId: Int
+) : BindingFragment<T>(resId) {
 
   @Inject
   lateinit var viewModelFactory: ViewModelProvider.Factory
