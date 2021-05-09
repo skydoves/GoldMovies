@@ -16,108 +16,82 @@
 
 package com.skydoves.mvvm.repository
 
-import androidx.lifecycle.MutableLiveData
-import com.skydoves.entity.Keyword
-import com.skydoves.entity.Review
-import com.skydoves.entity.Video
 import com.skydoves.entity.database.MovieDao
 import com.skydoves.entity.entities.Movie
-import com.skydoves.network.ApiResponse
-import com.skydoves.network.client.MovieClient
-import com.skydoves.network.message
+import com.skydoves.network.service.MovieService
+import com.skydoves.sandwich.suspendOnSuccess
+import com.skydoves.whatif.whatIfNotNull
 import javax.inject.Inject
 import javax.inject.Singleton
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.flow.onCompletion
 import timber.log.Timber
 
 @Singleton
 class MovieRepository @Inject constructor(
-  private val movieClient: MovieClient,
+  private val movieService: MovieService,
   private val movieDao: MovieDao
 ) : Repository {
-
-  override var isLoading: Boolean = false
 
   init {
     Timber.d("Injection MovieRepository")
   }
 
-  fun loadKeywordList(id: Int, error: (String) -> Unit): MutableLiveData<List<Keyword>> {
-    val liveData = MutableLiveData<List<Keyword>>()
+  fun loadKeywordList(id: Int, onSuccess: () -> Unit) = flow {
     val movie = movieDao.getMovie(id)
     var keywords = movie.keywords
     if (keywords.isNullOrEmpty()) {
-      this.isLoading = true
-      movieClient.fetchKeywords(id) { response ->
-        this.isLoading = false
-        when (response) {
-          is ApiResponse.Success -> {
-            response.data?.let { data ->
-              keywords = data.keywords
-              movie.keywords = keywords
-              liveData.postValue(keywords)
-              movieDao.updateMovie(movie)
-            }
-          }
-          is ApiResponse.Failure.Error -> error(response.message())
-          is ApiResponse.Failure.Exception -> error(response.message())
+      val response = movieService.fetchKeywords(id)
+      response.suspendOnSuccess {
+        data.whatIfNotNull {
+          keywords = it.keywords
+          movie.keywords = keywords
+          movieDao.updateMovie(movie)
+          emit(keywords)
         }
       }
+    } else {
+      emit(keywords)
     }
-    liveData.postValue(keywords)
-    return liveData
-  }
+  }.onCompletion { onSuccess() }.flowOn(Dispatchers.IO)
 
-  fun loadVideoList(id: Int, error: (String) -> Unit): MutableLiveData<List<Video>> {
-    val liveData = MutableLiveData<List<Video>>()
+  fun loadVideoList(id: Int, onSuccess: () -> Unit) = flow {
     val movie = movieDao.getMovie(id)
     var videos = movie.videos
     if (videos.isNullOrEmpty()) {
-      this.isLoading = true
-      movieClient.fetchVideos(id) { response ->
-        this.isLoading = false
-        when (response) {
-          is ApiResponse.Success -> {
-            response.data?.let { data ->
-              videos = data.results
-              movie.videos = videos
-              liveData.postValue(videos)
-              movieDao.updateMovie(movie)
-            }
-          }
-          is ApiResponse.Failure.Error -> error(response.message())
-          is ApiResponse.Failure.Exception -> error(response.message())
+      val response = movieService.fetchVideos(id)
+      response.suspendOnSuccess {
+        data.whatIfNotNull {
+          videos = it.results
+          movie.videos = videos
+          movieDao.updateMovie(movie)
+          emit(videos)
         }
       }
+    } else {
+      emit(videos)
     }
-    liveData.postValue(videos)
-    return liveData
-  }
+  }.onCompletion { onSuccess() }.flowOn(Dispatchers.IO)
 
-  fun loadReviewsList(id: Int, error: (String) -> Unit): MutableLiveData<List<Review>> {
-    val liveData = MutableLiveData<List<Review>>()
+  fun loadReviewsList(id: Int, onSuccess: () -> Unit) = flow {
     val movie = movieDao.getMovie(id)
     var reviews = movie.reviews
     if (reviews.isNullOrEmpty()) {
-      this.isLoading = true
-      movieClient.fetchReviews(id) { response ->
-        this.isLoading = false
-        when (response) {
-          is ApiResponse.Success -> {
-            response.data?.let { data ->
-              reviews = data.results
-              movie.reviews = reviews
-              liveData.postValue(reviews)
-              movieDao.updateMovie(movie)
-            }
-          }
-          is ApiResponse.Failure.Error -> error(response.message())
-          is ApiResponse.Failure.Exception -> error(response.message())
+      val response = movieService.fetchReviews(id)
+      response.suspendOnSuccess {
+        data.whatIfNotNull {
+          reviews = it.results
+          movie.reviews = reviews
+          movieDao.updateMovie(movie)
+          emit(reviews)
         }
       }
+    } else {
+      emit(reviews)
     }
-    liveData.postValue(reviews)
-    return liveData
-  }
+  }.onCompletion { onSuccess() }.flowOn(Dispatchers.IO)
 
   fun getMovie(id: Int) = movieDao.getMovie(id)
 

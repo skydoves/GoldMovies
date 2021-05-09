@@ -55,7 +55,7 @@ class MovieListFragment :
   private fun initializeUI() {
     RecyclerViewPaginator(
       recyclerView = recyclerView,
-      isLoading = { viewModel.isLoading() },
+      isLoading = { viewModel.isLoading },
       loadMore = { loadMore(it) },
       onLast = { false }
     ).apply {

@@ -16,11 +16,14 @@
 
 package com.skydoves.mvvm.ui.details.movie
 
+import androidx.databinding.Bindable
 import androidx.databinding.ObservableBoolean
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
+import androidx.lifecycle.asLiveData
 import androidx.lifecycle.switchMap
+import com.skydoves.bindables.BindingViewModel
+import com.skydoves.bindables.bindingProperty
 import com.skydoves.entity.Keyword
 import com.skydoves.entity.Review
 import com.skydoves.entity.Video
@@ -31,30 +34,43 @@ import timber.log.Timber
 
 class MovieDetailViewModel @Inject constructor(
   private val movieRepository: MovieRepository
-) : ViewModel() {
+) : BindingViewModel() {
 
   private val movieIdLiveData: MutableLiveData<Int> = MutableLiveData()
-  val keywordListLiveData: LiveData<List<Keyword>>
-  val videoListLiveData: LiveData<List<Video>>
-  val reviewListLiveData: LiveData<List<Review>>
+  val keywordListLiveData: LiveData<List<Keyword>?>
+  val videoListLiveData: LiveData<List<Video>?>
+  val reviewListLiveData: LiveData<List<Review>?>
   val toastLiveData: MutableLiveData<String> = MutableLiveData()
 
   private lateinit var movie: Movie
   val favourite = ObservableBoolean()
 
+  @get:Bindable
+  var isLoading: Boolean by bindingProperty(false)
+    private set
+
   init {
     Timber.d("Injection MovieDetailViewModel")
 
     this.keywordListLiveData = movieIdLiveData.switchMap { id ->
-      movieRepository.loadKeywordList(id) { toastLiveData.postValue(it) }
+      isLoading = true
+      movieRepository.loadKeywordList(id) {
+        isLoading = false
+      }.asLiveData()
     }
 
     this.videoListLiveData = movieIdLiveData.switchMap { id ->
-      movieRepository.loadVideoList(id) { toastLiveData.postValue(it) }
+      isLoading = true
+      movieRepository.loadVideoList(id) {
+        isLoading = false
+      }.asLiveData()
     }
 
     this.reviewListLiveData = movieIdLiveData.switchMap { id ->
-      movieRepository.loadReviewsList(id) { toastLiveData.postValue(it) }
+      isLoading = true
+      movieRepository.loadReviewsList(id) {
+        isLoading = false
+      }.asLiveData()
     }
   }
 

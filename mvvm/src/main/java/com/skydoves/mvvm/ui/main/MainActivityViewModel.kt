@@ -19,6 +19,7 @@ package com.skydoves.mvvm.ui.main
 import androidx.databinding.Bindable
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.asLiveData
 import androidx.lifecycle.switchMap
 import com.skydoves.bindables.BindingViewModel
 import com.skydoves.bindables.bindingProperty
@@ -48,19 +49,32 @@ class MainActivityViewModel @Inject constructor(
   var toastLiveData: String? by bindingProperty(null)
     private set
 
+  @get:Bindable
+  var isLoading: Boolean by bindingProperty(false)
+    private set
+
   init {
     Timber.d("injection MainActivityViewModel")
 
     this.movieListLiveData = moviePageLiveData.switchMap { page ->
-      discoverRepository.loadMovies(page) { toastLiveData = it }
+      isLoading = true
+      discoverRepository.loadMovies(page) {
+        isLoading = false
+      }.asLiveData()
     }
 
     this.tvListLiveData = tvPageLiveData.switchMap { page ->
-      discoverRepository.loadTvs(page) { toastLiveData = it }
+      isLoading = true
+      discoverRepository.loadTvs(page) {
+        isLoading = false
+      }.asLiveData()
     }
 
     this.peopleLiveData = peoplePageLiveData.switchMap { page ->
-      peopleRepository.loadPeople(page) { toastLiveData = it }
+      isLoading = true
+      peopleRepository.loadPeople(page) {
+        isLoading = false
+      }.asLiveData()
     }
   }
 
@@ -73,6 +87,4 @@ class MainActivityViewModel @Inject constructor(
   fun getFavouriteMovieList() = discoverRepository.getFavouriteMovieList()
 
   fun getFavouriteTvList() = discoverRepository.getFavouriteTvList()
-
-  fun isLoading() = discoverRepository.isLoading || peopleRepository.isLoading
 }
